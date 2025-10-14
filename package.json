@@ -1,0 +1,28 @@
+{
+  "dependencies": {
+    "@mozilla/readability": "^0.6.0"
+  },
+  "name": "chrome-challenge-2025",
+  "version": "1.0.0",
+  "description": "",
+  "main": "background.js",
+  "devDependencies": {
+    "webpack": "^5.102.1",
+    "webpack-cli": "^6.0.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/herman088/Chrome-challenge-2025.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/herman088/Chrome-challenge-2025/issues"
+  },
+  "homepage": "https://github.com/herman088/Chrome-challenge-2025#readme"
+}

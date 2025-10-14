@@ -3,18 +3,19 @@
   "description": "Summarize articles while keeping you engaged",
   "version": "1.0",
   "manifest_version": 3,
+  "permissions": ["scripting", "activeTab"],
   "action": {
-    "default_popup": "popup.html",
+    "default_popup": "src/popup.html",
     "default_icon": "main.png"
   },
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "src/background.js"
   },
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["content.js"],
-      "css": ["content.css"]
+      "js": ["dist/content.js"],
+      "css": ["src/content.css"]
     }
   ]
 }
