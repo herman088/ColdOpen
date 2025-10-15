@@ -4,18 +4,24 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <style>
-      #extractBtn:disabled {
-        background: #555;
-        cursor: not-allowed;
-      }
-    </style>
+    <link rel="stylesheet" href="content.css" />
   </head>
   <body>
-    <h1>Hello Extensions</h1>
+    <div class="logo">Logo</div>
+    <div class="api key">API KEY input</div>
+    <div class="reading-levels">
+      <label>Reading levels</label>
+
+      <div class="level-buttons">
+        <button type="button" class="basic" data-level="basic">Basic</button>
+
+        <button type="button" class="medium" data-level="medium">Medium</button>
+
+        <button type="button" class="expert" data-level="expert">Expert</button>
+      </div>
+    </div>
     <button id="extractBtn">Generate Insight cards</button>
     <div id="status">Click button to analyze this page</div>
-
     <script src="popup.js"></script>
   </body>
 </html>

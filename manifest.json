@@ -3,7 +3,7 @@
   "description": "Summarize articles while keeping you engaged",
   "version": "1.0",
   "manifest_version": 3,
-  "permissions": ["scripting", "activeTab"],
+  "permissions": ["scripting", "activeTab", "storage"],
   "action": {
     "default_popup": "src/popup.html",
     "default_icon": "main.png"

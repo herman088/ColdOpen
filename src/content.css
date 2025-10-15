@@ -1,0 +1,59 @@
+:root {
+  --bg: #f0f1fa; /* Soft cool white background */
+  --card-bg: #ffffff; /* Card surfaces */
+  --text: #1f2937; /* Primary text */
+  --text-secondary: #6b7280; /* Secondary text */
+  --border: #e5e7eb; /* Borders / dividers */
+  --button: #4f46e5; /* Primary button Indigo */
+  --button-hover: #4338ca; /* Darker hover */
+}
+
+body {
+  width: 300px;
+  height: 600px;
+  font-family: Arial, sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
+}
+
+.reading-levels {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  border-style: solid;
+  border-color: black;
+  margin-top: 100px;
+}
+label {
+  display: block;
+  margin-bottom: 20px;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.level-buttons {
+  display: flex;
+  gap: 0.5rem; /* space between buttons */
+  justify-content: space-between;
+}
+.level-buttons button {
+  background-color: var(--button);
+  border: 1px solid;
+  border-radius: 0.4rem;
+  font-size: 0.8rem;
+  font-weight: 400;
+  text-align: center;
+  line-height: 1.25rem;
+  color: white;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+}
+
+button.active {
+  background-color: var(--button-hover);
+}
+
+#extractBtn:disabled {
+  background: #555;
+  cursor: not-allowed;
+}
