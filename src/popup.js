@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
   btn.addEventListener("click", async () => {
     btn.disabled = true;
     status.textContent = "Reading page...";
+    const readerLevel = await getUserLevel();
 
     try {
       // returns fulfilled promise of array of "tabs" matching args,destructure and get active tab,
@@ -24,6 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
       //promise fulfilled with response object reply by content.js
       const response = await chrome.tabs.sendMessage(tab.id, {
         action: "extractArticle",
+        readerLevel: readerLevel,
       });
 
       if (response.success) {
@@ -74,6 +76,7 @@ function getUserLevel() {
       buttons.forEach((btn) => {
         btn.classList.toggle("active", btn.dataset.level === savedLevel);
       });
+      return savedLevel;
     })
     .catch((err) => console.error("Failed to load reader level:", err));
 }

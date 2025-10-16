@@ -1,4 +1,12 @@
 import { Readability } from "@mozilla/readability";
+const prompts = {
+  basic:
+    "Use simple, easy-to-understand language. Use short sentences, everyday words, and clear examples.",
+  medium:
+    "Use clear and informative way suitable for a general audience. Include important details and some technical terms, but explain them so the reader can follow. Use full sentences and logical flow.",
+  expert:
+    "Use detailed, professional tone. Use advanced vocabulary and complex sentence structures. Highlight key insights, implications, and nuanced points that a knowledgeable reader would appreciate.",
+};
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === "extractArticle") {
@@ -6,15 +14,19 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       //clone dom
       const clonedDOM = document.cloneNode(true);
       const article = new Readability(clonedDOM).parse();
-
+      const readerLevel = request.readerLevel;
       if (article) {
-        const summarizedText = initPromptAPI(article.textContent);
+        const summarizedText = initPromptAPI(
+          article.textContent,
+          prompts[readerLevel]
+        );
         if (summarizedText) {
           sendResponse({
             success: true,
             title: article.title,
             text: summarizedText,
           });
+          console.log(prompts[readerLevel]);
         } else {
           console.log("Summary API failed");
         }
@@ -37,8 +49,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   }
   return true;
 });
-
-async function initSummarizerAPI(parsedArticle) {
+/*
+async function initSummarizerAPI(parsedArticle, readerLevelPrompt) {
   const options = {
     sharedContext: "This is a educational article",
     type: "key-points",
@@ -58,8 +70,8 @@ async function initSummarizerAPI(parsedArticle) {
     return;
   }
 }
-
-async function initPromptAPI(parsedArticle) {
+*/
+async function initPromptAPI(parsedArticle, promptTextReadingLevel) {
   try {
     const availability = await LanguageModel.availability();
 
@@ -70,7 +82,7 @@ async function initPromptAPI(parsedArticle) {
 
       // Prompt the model and wait for the whole result to come back.
       const result = await session.prompt(
-        `Summarize ${parsedArticle} in bullet points, categorize each main idea in each bullet point, with each bullet point giving some relevant information less than 100 words`
+        `Summarize ${parsedArticle} into main points, with each main point giving relevant information of maximum 100words.${promptTextReadingLevel}`
       );
       console.log(result);
     } else {
