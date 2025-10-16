@@ -31,8 +31,8 @@ document.addEventListener("DOMContentLoaded", () => {
       if (response.success) {
         status.textContent = "Parsing article with Summarizer";
         console.log("Article title:", response.title);
-        console.log("Text length:", response.text.length, "chars");
         console.log("Text:", response.text);
+        renderSummary(response.text);
       } else {
         status.textContent =
           "❌ Couldn't extract clean text. Try another page.";
@@ -66,17 +66,45 @@ function setUserLevel() {
 }
 
 // Function to load saved reader level and update UI
-function getUserLevel() {
-  const buttons = document.querySelectorAll(".level-buttons button");
+async function getUserLevel() {
+  try {
+    const buttons = document.querySelectorAll(".level-buttons button");
 
-  chrome.storage.local
-    .get("readerLevel")
-    .then((data) => {
-      const savedLevel = data.readerLevel || "medium"; // default
-      buttons.forEach((btn) => {
-        btn.classList.toggle("active", btn.dataset.level === savedLevel);
-      });
-      return savedLevel;
-    })
-    .catch((err) => console.error("Failed to load reader level:", err));
+    // await the promise and get the data
+    const data = await chrome.storage.local.get("readerLevel");
+    const savedLevel = data.readerLevel || "medium"; // default
+
+    // update button UI
+    buttons.forEach((btn) => {
+      btn.classList.toggle("active", btn.dataset.level === savedLevel);
+    });
+
+    // return the value so caller can use it
+    return savedLevel;
+  } catch (err) {
+    console.error("Failed to load reader level:", err);
+    return "medium";
+  }
+}
+
+function renderSummary(data) {
+  if (!data) {
+    console.log("No data to render");
+    return;
+  }
+  const container = document.querySelector(".card-list");
+
+  data.sections.forEach((section) => {
+    const card = document.createElement("div");
+    card.classList.add("card");
+
+    const heading = document.createElement("h2");
+    heading.textContent = section.heading;
+
+    const content = document.createElement("div");
+    content.textContent = section.content;
+
+    card.append(heading, content);
+    container.appendChild(card);
+  });
 }

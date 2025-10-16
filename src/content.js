@@ -10,44 +10,47 @@ const prompts = {
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === "extractArticle") {
-    try {
-      //clone dom
-      const clonedDOM = document.cloneNode(true);
-      const article = new Readability(clonedDOM).parse();
-      const readerLevel = request.readerLevel;
-      if (article) {
-        const summarizedText = initPromptAPI(
-          article.textContent,
-          prompts[readerLevel]
-        );
-        if (summarizedText) {
-          sendResponse({
-            success: true,
-            title: article.title,
-            text: summarizedText,
-          });
-          console.log(prompts[readerLevel]);
+    (async () => {
+      try {
+        //clone dom
+        const clonedDOM = document.cloneNode(true);
+        const article = new Readability(clonedDOM).parse();
+        const readerLevel = request.readerLevel;
+        console.log(readerLevel);
+        if (article) {
+          const summarizedText = await initPromptAPI(
+            article.textContent,
+            prompts[readerLevel]
+          );
+          if (summarizedText) {
+            sendResponse({
+              success: true,
+              title: article.title,
+              text: summarizedText,
+            });
+            console.log("OI", summarizedText, prompts[readerLevel]);
+          } else {
+            console.log("Summary API failed");
+          }
         } else {
-          console.log("Summary API failed");
+          sendResponse({
+            success: false,
+            title: document.title,
+            text: document.body.innerText || "",
+          });
         }
-      } else {
+      } catch (error) {
+        console.log("Error", error);
         sendResponse({
           success: false,
+          error: error.message,
           title: document.title,
-          text: document.body.innerText || "",
+          text: "",
         });
       }
-    } catch (error) {
-      console.log("Error", error);
-      sendResponse({
-        success: false,
-        error: error.message,
-        title: document.title,
-        text: "",
-      });
-    }
+    })();
+    return true;
   }
-  return true;
 });
 /*
 async function initSummarizerAPI(parsedArticle, readerLevelPrompt) {
@@ -90,7 +93,7 @@ const schema = {
   },
   required: ["title", "sections"],
 };
-async function initPromptAPI(parsedArticle, promptTextReadingLevel) {
+async function initPromptAPI(parsedArticle, readingLevel) {
   try {
     const availability = await LanguageModel.availability();
 
@@ -101,7 +104,7 @@ async function initPromptAPI(parsedArticle, promptTextReadingLevel) {
 
       // Prompt the model and wait for the whole result to come back.
       const result = await session.prompt(
-        `Summarize ${parsedArticle} into main points, with each main point giving relevant information of maximum 80words.`,
+        `Summarize ${parsedArticle} into main points, with each main point giving relevant information of maximum 80words.${readingLevel}`,
         {
           responseConstraint: schema,
         }
