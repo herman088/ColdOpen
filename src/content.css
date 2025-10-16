@@ -57,3 +57,32 @@ button.active {
   background: #555;
   cursor: not-allowed;
 }
+
+.card-list {
+  display: flex;
+  flex-direction: column;
+  padding: 3rem;
+  justify-content: center;
+  border-style: solid;
+  border-color: black;
+  align-items: center;
+}
+.card {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  height: 150px;
+  width: 200px;
+  min-width: 150px;
+  padding: 1rem;
+  border-radius: 16px;
+  background: var(--card-bg);
+  box-shadow: -1rem 0 2rem rgba(0, 0, 0, 0.12);
+  margin: 1rem;
+}
+
+.card:hover {
+  transform: translateY(-10px);
+  border-color: #6366f1;
+  box-shadow: 0 0 25px rgba(99, 102, 241, 0.4);
+}

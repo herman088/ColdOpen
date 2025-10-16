@@ -71,6 +71,25 @@ async function initSummarizerAPI(parsedArticle, readerLevelPrompt) {
   }
 }
 */
+const schema = {
+  type: "object",
+  properties: {
+    title: { type: "string" },
+    summary: { type: "string" },
+    sections: {
+      type: "array",
+      items: {
+        type: "object",
+        properties: {
+          heading: { type: "string" },
+          content: { type: "string" },
+        },
+        required: ["heading", "content"],
+      },
+    },
+  },
+  required: ["title", "sections"],
+};
 async function initPromptAPI(parsedArticle, promptTextReadingLevel) {
   try {
     const availability = await LanguageModel.availability();
@@ -82,9 +101,13 @@ async function initPromptAPI(parsedArticle, promptTextReadingLevel) {
 
       // Prompt the model and wait for the whole result to come back.
       const result = await session.prompt(
-        `Summarize ${parsedArticle} into main points, with each main point giving relevant information of maximum 100words.${promptTextReadingLevel}`
+        `Summarize ${parsedArticle} into main points, with each main point giving relevant information of maximum 80words.`,
+        {
+          responseConstraint: schema,
+        }
       );
-      console.log(result);
+      console.log(JSON.parse(result));
+      return JSON.parse(result);
     } else {
       alert("API NOT READY/AVAILABLE");
       return;
