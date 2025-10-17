@@ -1,3 +1,5 @@
+import { GoogleGenAI, Modality } from "@google/genai";
+
 document.addEventListener("DOMContentLoaded", () => {
   getUserLevel();
   setUserLevel();
@@ -87,14 +89,15 @@ async function getUserLevel() {
   }
 }
 
-function renderSummary(data) {
+async function renderSummary(data) {
   if (!data) {
     console.log("No data to render");
     return;
   }
   const container = document.querySelector(".card-list");
+  container.innerHTML = "";
 
-  data.sections.forEach((section) => {
+  for (const section of data.sections) {
     const card = document.createElement("div");
     card.classList.add("card");
 
@@ -105,6 +108,47 @@ function renderSummary(data) {
     content.textContent = section.content;
 
     card.append(heading, content);
+
+    try {
+      const imageLoad = await getImages(
+        `Generate relevant interesting and engaging visuals that summarize below text:${section.heading},${section.content}`
+      );
+      if (imageLoad) {
+        const img = document.createElement("img");
+        img.src = URL.createObjectURL(new Blob([imageLoad]));
+        card.appendChild(img);
+      }
+    } catch (error) {
+      console.error(
+        "Failed to generate image for section:",
+        section.heading,
+        error
+      );
+    }
     container.appendChild(card);
+  }
+}
+
+async function getImages(promptText) {
+  const key = "AIzaSyCWH1kLTdIZ-CIEtHnAF6qG5pr9ax92BP8";
+  const ai = new GoogleGenAI({ apiKey: key });
+  const response = await ai.models.generateContent({
+    model: "gemini-2.5-flash-image",
+    contents: promptText,
   });
+
+  for (const part of response.candidates[0].content.parts) {
+    if (part.text) {
+      console.log(part.text);
+    } else if (part.inlineData) {
+      const imageData = part.inlineData.data;
+      const binary = atob(imageData);
+      const bytes = new Uint8Array(binary.length);
+      for (let i = 0; i < binary.length; i++) {
+        bytes[i] = binary.charCodeAt(i);
+      }
+      return bytes;
+    }
+  }
+  return null;
 }

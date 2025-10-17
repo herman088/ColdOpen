@@ -104,7 +104,7 @@ async function initPromptAPI(parsedArticle, readingLevel) {
 
       // Prompt the model and wait for the whole result to come back.
       const result = await session.prompt(
-        `Summarize ${parsedArticle} into main points, with each main point giving relevant information of maximum 80words.${readingLevel}`,
+        `Summarize ${parsedArticle} into main points, with each main point giving relevant information of maximum 60words.${readingLevel}.Keep it to max 3 main points/sections`,
         {
           responseConstraint: schema,
         }
