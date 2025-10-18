@@ -9,7 +9,7 @@
 }
 
 body {
-  width: 300px;
+  width: 360px;
   height: 600px;
   font-family: Arial, sans-serif;
   background-color: var(--bg);
@@ -20,8 +20,7 @@ body {
   display: flex;
   justify-content: center;
   flex-direction: column;
-  border-style: solid;
-  border-color: black;
+
   margin-top: 100px;
 }
 label {
@@ -63,22 +62,24 @@ button.active {
   flex-direction: column;
   padding: 3rem;
   justify-content: center;
-  border-style: solid;
-  border-color: black;
+
   align-items: center;
 }
 .card {
   display: flex;
   flex-direction: column;
   position: relative;
+  /*
   height: 200px;
-  width: 260px;
+  */
+
+  width: 300px;
   min-width: 150px;
   padding: 1rem;
   border-radius: 16px;
   background: var(--card-bg);
   box-shadow: -1rem 0 2rem rgba(0, 0, 0, 0.12);
-  margin: 1rem;
+  margin: 1.3rem;
 }
 
 .card:hover {
@@ -89,17 +90,49 @@ button.active {
 
 .card img {
   width: 100%;
-  height: 120px;
+  height: auto;
   object-fit: cover;
-  border-radius: 6px;
+  border-radius: 10px;
 }
 
 .card h2 {
   font-size: 16px;
-  /*margin: 0;*/
+  margin: 10px;
+  word-break: break-word;
+
+  font-weight: 600;
 }
 .card p {
   font-size: 14px;
+  margin: 10px;
   overflow: hidden;
   text-overflow: ellipsis;
+  word-break: break-word;
+}
+
+#settingsBtn {
+  background: var(--bg);
+  border: none;
+  border-radius: 100%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  cursor: pointer;
+  top: 15px;
+  right: 15px;
+}
+
+#settings-overlay {
+  position: fixed;
+  top: 40px;
+  right: 30px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 1rem;
+  width: 230px;
+  display: none;
 }

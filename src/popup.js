@@ -1,5 +1,24 @@
 import { GoogleGenAI, Modality } from "@google/genai";
 
+const overlay = document.getElementById("settings-overlay");
+const settingsBtn = document.getElementById("settingsBtn");
+console.log(overlay.style.display);
+settingsBtn.addEventListener("click", (e) => {
+  e.stopPropagation();
+  if (overlay.style.display === "block") {
+    overlay.style.display = "none";
+  } else {
+    overlay.style.display = "block";
+  }
+  console.log(overlay, settingsBtn);
+});
+
+document.addEventListener("click", (e) => {
+  if (!overlay.contains(e.target) && e.target !== settingsBtn) {
+    overlay.style.display = "none";
+  }
+});
+
 document.addEventListener("DOMContentLoaded", () => {
   getUserLevel();
   setUserLevel();
@@ -81,7 +100,6 @@ async function getUserLevel() {
       btn.classList.toggle("active", btn.dataset.level === savedLevel);
     });
 
-    // return the value so caller can use it
     return savedLevel;
   } catch (err) {
     console.error("Failed to load reader level:", err);
@@ -107,11 +125,9 @@ async function renderSummary(data) {
     const content = document.createElement("div");
     content.textContent = section.content;
 
-    card.append(heading, content);
-
     try {
       const imageLoad = await getImages(
-        `Generate relevant interesting and engaging visuals that summarize below text:${section.heading},${section.content}`
+        `Generate relevant interesting and engaging visuals that summarize and simplify below text:${section.heading},${section.content}.Width and height of images around 200px`
       );
       if (imageLoad) {
         const img = document.createElement("img");
@@ -125,12 +141,13 @@ async function renderSummary(data) {
         error
       );
     }
+    card.append(heading, content);
     container.appendChild(card);
   }
 }
 
 async function getImages(promptText) {
-  const key = "AIzaSyCWH1kLTdIZ-CIEtHnAF6qG5pr9ax92BP8";
+  const key = "";
   const ai = new GoogleGenAI({ apiKey: key });
   const response = await ai.models.generateContent({
     model: "gemini-2.5-flash-image",
