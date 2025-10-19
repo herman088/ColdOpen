@@ -10,7 +10,6 @@ settingsBtn.addEventListener("click", (e) => {
   } else {
     overlay.style.display = "block";
   }
-  console.log(overlay, settingsBtn);
 });
 
 document.addEventListener("click", (e) => {
@@ -22,7 +21,7 @@ document.addEventListener("click", (e) => {
 document.addEventListener("DOMContentLoaded", () => {
   getUserLevel();
   setUserLevel();
-  const btn = document.getElementById("extractBtn");
+  const btn = document.getElementById("generateBtn");
   const status = document.getElementById("status");
 
   btn.addEventListener("click", async () => {

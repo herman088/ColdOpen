@@ -1,19 +1,57 @@
 :root {
-  --bg: #f0f1fa; /* Soft cool white background */
-  --card-bg: #ffffff; /* Card surfaces */
-  --text: #1f2937; /* Primary text */
-  --text-secondary: #6b7280; /* Secondary text */
-  --border: #e5e7eb; /* Borders / dividers */
-  --button: #4f46e5; /* Primary button Indigo */
-  --button-hover: #4338ca; /* Darker hover */
+  --bg: #f5f7fa; /* Light grey-blue base */
+  --card-bg: #fcfdff; /* Almost white, but with cool grey undertone */
+  --text: #1a1f29;
+  --text-secondary: #5a6374;
+  --border: #dde3eb;
+  --button: #3b82f6;
+  --button-hover: #2563eb;
 }
-
 body {
   width: 360px;
-  height: 600px;
+  height: 580px;
   font-family: Arial, sans-serif;
   background-color: var(--bg);
   color: var(--text);
+}
+
+.cta {
+  display: flex;
+  flex-direction: column;
+  margin-top: 60px;
+}
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+#settingsBtn {
+  background: var(--bg);
+  border: none;
+  border-radius: 100%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  cursor: pointer;
+  top: 15px;
+  right: 15px;
+  z-index: 200;
+}
+
+#settings-overlay {
+  position: fixed;
+  top: 40px;
+  right: 30px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 1rem;
+  width: 230px;
+  display: none;
+  z-index: 100;
 }
 
 .reading-levels {
@@ -35,10 +73,11 @@ label {
   gap: 0.5rem; /* space between buttons */
   justify-content: space-between;
 }
-.level-buttons button {
+.level-buttons button,
+#generateBtn {
   background-color: var(--button);
   border: 1px solid;
-  border-radius: 0.4rem;
+  border-radius: 0.5rem;
   font-size: 0.8rem;
   font-weight: 400;
   text-align: center;
@@ -58,34 +97,45 @@ button.active {
 }
 
 .card-list {
+  margin-top: 20px;
   display: flex;
   flex-direction: column;
-  padding: 3rem;
-  justify-content: center;
-
   align-items: center;
+  flex: 1;
+  overflow-y: auto;
+}
+.card-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.card-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.card-list::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+}
+
+.card-list::-webkit-scrollbar-button {
+  display: none;
 }
 .card {
   display: flex;
   flex-direction: column;
   position: relative;
-  /*
-  height: 200px;
-  */
-
-  width: 300px;
+  width: 240px;
   min-width: 150px;
   padding: 1rem;
   border-radius: 16px;
   background: var(--card-bg);
-  box-shadow: -1rem 0 2rem rgba(0, 0, 0, 0.12);
-  margin: 1.3rem;
+  margin-top: 2rem;
 }
 
 .card:hover {
   transform: translateY(-10px);
-  border-color: #6366f1;
-  box-shadow: 0 0 25px rgba(99, 102, 241, 0.4);
+  border-color: var(--text);
+  box-shadow: 0 0 25px var(--button-hover);
 }
 
 .card img {
@@ -110,29 +160,7 @@ button.active {
   word-break: break-word;
 }
 
-#settingsBtn {
-  background: var(--bg);
-  border: none;
-  border-radius: 100%;
-  width: 36px;
-  height: 36px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: fixed;
-  cursor: pointer;
-  top: 15px;
-  right: 15px;
-}
-
-#settings-overlay {
-  position: fixed;
-  top: 40px;
-  right: 30px;
-  background: white;
-  border: 1px solid #e5e7eb;
-  border-radius: 10px;
-  padding: 1rem;
-  width: 230px;
-  display: none;
+#status {
+  color: var(--text);
+  text-align: center;
 }
