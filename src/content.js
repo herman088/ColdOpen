@@ -112,7 +112,7 @@ async function initPromptAPI(parsedArticle, readingLevel) {
       console.log(JSON.parse(result));
       return JSON.parse(result);
     } else {
-      alert("API NOT READY/AVAILABLE");
+      alert("PROMPT API NOT READY/AVAILABLE");
       return;
     }
   } catch (error) {

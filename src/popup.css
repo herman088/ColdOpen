@@ -45,7 +45,7 @@ body {
   position: fixed;
   top: 40px;
   right: 30px;
-  background: white;
+  background: var(--bg);
   border: 1px solid #e5e7eb;
   border-radius: 10px;
   padding: 1rem;
@@ -74,19 +74,24 @@ label {
   justify-content: space-between;
 }
 .level-buttons button,
-#generateBtn {
+#generateBtn,
+#apiKeyBtn {
   background-color: var(--button);
   border: 1px solid;
   border-radius: 0.5rem;
   font-size: 0.8rem;
   font-weight: 400;
   text-align: center;
-  line-height: 1.25rem;
   color: white;
   padding: 0.75rem 1rem;
   cursor: pointer;
 }
-
+#apiKeyBtn {
+  padding: 0.5rem;
+}
+#apiKeyField {
+  line-height: 1.5rem;
+}
 button.active {
   background-color: var(--button-hover);
 }

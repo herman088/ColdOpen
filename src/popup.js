@@ -1,5 +1,6 @@
 import { GoogleGenAI, Modality } from "@google/genai";
 
+/*OVERLAY*/
 const overlay = document.getElementById("settings-overlay");
 const settingsBtn = document.getElementById("settingsBtn");
 console.log(overlay.style.display);
@@ -18,7 +19,54 @@ document.addEventListener("click", (e) => {
   }
 });
 
+/*API KEY*/
+const apiButton = document.getElementById("apiKeyBtn");
+const savedText = document.getElementById("savedText");
+const apiKeyInput = document.getElementById("apiKeyField");
+apiKeyInput.addEventListener("input", () => {
+  apiButton.style.display = "inline-block";
+  savedText.style.display = "none";
+});
+
+function setAPIKey() {
+  apiButton.addEventListener("click", () => {
+    if (!apiKeyInput.value.trim()) {
+      alert("Please enter a valid API key.");
+      return;
+    }
+    chrome.storage.local
+      .set({ apiKey: apiKeyInput.value.trim() })
+      .then(() => {
+        apiButton.style.display = "none";
+        savedText.style.display = "inline";
+        console.log("API key saved:", apiKeyInput.value.trim());
+      })
+      .catch((err) => console.error("Failed to save apiKey:", err));
+  });
+}
+async function getAPIKey() {
+  try {
+    const result = await chrome.storage.local.get("apiKey");
+    const apiKey = result.apiKey;
+    if (apiKey) {
+      apiButton.style.display = "none";
+      savedText.style.display = "inline";
+      apiKeyInput.value = apiKey;
+      console.log(apiKey);
+      return apiKey;
+    }
+    apiButton.style.display = "inline-block";
+    savedText.style.display = "none";
+    return;
+  } catch (error) {
+    console.log("Failed to get api key", error);
+  }
+}
+
+/* DOM CONTENT LOAD */
 document.addEventListener("DOMContentLoaded", () => {
+  setAPIKey();
+  getAPIKey();
   getUserLevel();
   setUserLevel();
   const btn = document.getElementById("generateBtn");
@@ -38,7 +86,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (!tab.url.startsWith("http")) {
         status.textContent =
-          "⚠️ Can't analyze this page (file://, chrome://, etc.)";
+          " Can't analyze this page (file://, chrome://, etc.)";
         btn.disabled = false;
         return;
       }
@@ -54,8 +102,7 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log("Text:", response.text);
         renderSummary(response.text);
       } else {
-        status.textContent =
-          "❌ Couldn't extract clean text. Try another page.";
+        status.textContent = " Couldn't extract clean text. Try another page.";
         btn.disabled = false;
       }
     } catch (error) {
@@ -125,7 +172,9 @@ async function renderSummary(data) {
     content.textContent = section.content;
 
     try {
+      const apiKey = await getAPIKey();
       const imageLoad = await getImages(
+        apiKey,
         `Generate relevant interesting and engaging visuals that summarize and simplify below text:${section.heading},${section.content}.Width and height of images around 200px`
       );
       if (imageLoad) {
@@ -145,26 +194,29 @@ async function renderSummary(data) {
   }
 }
 
-async function getImages(promptText) {
-  const key = "";
-  const ai = new GoogleGenAI({ apiKey: key });
-  const response = await ai.models.generateContent({
-    model: "gemini-2.5-flash-image",
-    contents: promptText,
-  });
+async function getImages(apiKey, promptText) {
+  const ai = new GoogleGenAI({ apiKey: apiKey });
+  try {
+    const response = await ai.models.generateContent({
+      model: "gemini-2.5-flash-image",
+      contents: promptText,
+    });
 
-  for (const part of response.candidates[0].content.parts) {
-    if (part.text) {
-      console.log(part.text);
-    } else if (part.inlineData) {
-      const imageData = part.inlineData.data;
-      const binary = atob(imageData);
-      const bytes = new Uint8Array(binary.length);
-      for (let i = 0; i < binary.length; i++) {
-        bytes[i] = binary.charCodeAt(i);
+    for (const part of response.candidates[0].content.parts) {
+      if (part.text) {
+        console.log(part.text);
+      } else if (part.inlineData) {
+        const imageData = part.inlineData.data;
+        const binary = atob(imageData);
+        const bytes = new Uint8Array(binary.length);
+        for (let i = 0; i < binary.length; i++) {
+          bytes[i] = binary.charCodeAt(i);
+        }
+        return bytes;
       }
-      return bytes;
     }
+    return null;
+  } catch (error) {
+    console.log("Image API process error", error);
   }
-  return null;
 }
