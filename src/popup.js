@@ -65,6 +65,7 @@ async function getAPIKey() {
 
 /* DOM CONTENT LOAD */
 document.addEventListener("DOMContentLoaded", () => {
+  //verticalScroll();
   setAPIKey();
   getAPIKey();
   getUserLevel();
@@ -161,6 +162,15 @@ async function renderSummary(data) {
   const container = document.querySelector(".card-list");
   container.innerHTML = "";
 
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        entry.target.classList.toggle("active", entry.isIntersecting);
+      });
+    },
+    { threshold: 0.6 }
+  );
+
   for (const section of data.sections) {
     const card = document.createElement("div");
     card.classList.add("card");
@@ -175,7 +185,7 @@ async function renderSummary(data) {
       const apiKey = await getAPIKey();
       const imageLoad = await getImages(
         apiKey,
-        `Generate relevant interesting and engaging visuals that summarize and simplify below text:${section.heading},${section.content}.Width and height of images around 200px`
+        `Generate relevant interesting and engaging visuals that summarize and simplify below text:${section.heading},${section.content}.Width of image about maximum 240px`
       );
       if (imageLoad) {
         const img = document.createElement("img");
@@ -191,6 +201,10 @@ async function renderSummary(data) {
     }
     card.append(heading, content);
     container.appendChild(card);
+    if (container.children.length === 1) {
+      card.classList.add("active");
+    }
+    observer.observe(card);
   }
 }
 

@@ -1,11 +1,10 @@
 import { Readability } from "@mozilla/readability";
 const prompts = {
-  basic:
-    "Use simple, easy-to-understand language. Use short sentences, everyday words, and clear examples.",
+  basic: "Explain simply: short sentences, everyday words, clear examples.",
   medium:
-    "Use clear and informative way suitable for a general audience. Include important details and some technical terms, but explain them so the reader can follow. Use full sentences and logical flow.",
+    "Explain clearly for a general audience: include key details and define technical terms.",
   expert:
-    "Use detailed, professional tone. Use advanced vocabulary and complex sentence structures. Highlight key insights, implications, and nuanced points that a knowledgeable reader would appreciate.",
+    "Explain with depth: advanced language, nuanced insights, and professional tone.",
 };
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
