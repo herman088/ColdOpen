@@ -65,7 +65,7 @@ async function getAPIKey() {
 
 /* DOM CONTENT LOAD */
 document.addEventListener("DOMContentLoaded", () => {
-  //verticalScroll();
+  openZoom();
   setAPIKey();
   getAPIKey();
   getUserLevel();
@@ -185,7 +185,7 @@ async function renderSummary(data) {
       const apiKey = await getAPIKey();
       const imageLoad = await getImages(
         apiKey,
-        `Generate relevant interesting and engaging visuals that summarize and simplify below text:${section.heading},${section.content}.Width of image about maximum 240px`
+        `Generate relevant interesting and engaging visuals that summarize and simplify below text:${section.heading},${section.content}.`
       );
       if (imageLoad) {
         const img = document.createElement("img");
@@ -233,4 +233,35 @@ async function getImages(apiKey, promptText) {
   } catch (error) {
     console.log("Image API process error", error);
   }
+}
+
+function openZoom() {
+  const zoomableImgs = document.querySelectorAll(".card img");
+  const modal = document.createElement("div");
+  modal.classList.add("image-modal");
+  const modalImg = document.createElement("img");
+  const closeBtn = document.createElement("span");
+  closeBtn.classList.add("close");
+  closeBtn.innerHTML = "&times";
+
+  modal.appendChild(closeBtn);
+  modal.appendChild(modalImg);
+
+  document.body.appendChild(modal);
+  document.querySelector(".card-list").addEventListener("click", (e) => {
+    if (e.target.tagName === "IMG") {
+      modal.style.display = "flex";
+      modalImg.src = e.target.src;
+    }
+  });
+
+  closeBtn.addEventListener("click", () => {
+    modal.style.display = "none";
+  });
+
+  modal.addEventListener("click", (event) => {
+    if (event.target === modal) {
+      modal.style.display = "none";
+    }
+  });
 }
