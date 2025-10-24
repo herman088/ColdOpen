@@ -65,6 +65,7 @@ async function getAPIKey() {
 
 /* DOM CONTENT LOAD */
 document.addEventListener("DOMContentLoaded", () => {
+  populateSavedPage();
   openZoom();
   setAPIKey();
   getAPIKey();
@@ -180,16 +181,16 @@ async function renderSummary(data) {
 
     const content = document.createElement("div");
     content.textContent = section.content;
-
+    const saveBtn = document.createElement("button");
+    const img = document.createElement("img");
     try {
       const apiKey = await getAPIKey();
-      const imageLoad = await getImages(
+      const imageDataLoad = await getImageData(
         apiKey,
         `Generate relevant interesting and engaging visuals that summarize and simplify below text:${section.heading},${section.content}.`
       );
-      if (imageLoad) {
-        const img = document.createElement("img");
-        img.src = URL.createObjectURL(new Blob([imageLoad]));
+      if (imageDataLoad) {
+        img.src = `data:image/png;base64,${imageDataLoad}`;
         card.appendChild(img);
       }
     } catch (error) {
@@ -199,7 +200,15 @@ async function renderSummary(data) {
         error
       );
     }
-    card.append(heading, content);
+    saveBtn.addEventListener("click", async () => {
+      const savedCard = {
+        heading: section.heading,
+        content: section.content,
+        img: img.src || null,
+      };
+      await saveCard(savedCard);
+    });
+    card.append(heading, content, saveBtn);
     container.appendChild(card);
     if (container.children.length === 1) {
       card.classList.add("active");
@@ -208,7 +217,7 @@ async function renderSummary(data) {
   }
 }
 
-async function getImages(apiKey, promptText) {
+async function getImageData(apiKey, promptText) {
   const ai = new GoogleGenAI({ apiKey: apiKey });
   try {
     const response = await ai.models.generateContent({
@@ -220,18 +229,14 @@ async function getImages(apiKey, promptText) {
       if (part.text) {
         console.log(part.text);
       } else if (part.inlineData) {
-        const imageData = part.inlineData.data;
-        const binary = atob(imageData);
-        const bytes = new Uint8Array(binary.length);
-        for (let i = 0; i < binary.length; i++) {
-          bytes[i] = binary.charCodeAt(i);
-        }
-        return bytes;
+        return part.inlineData.data;
       }
     }
+    console.log("No image data found");
     return null;
   } catch (error) {
     console.log("Image API process error", error);
+    return null;
   }
 }
 
@@ -262,6 +267,75 @@ function openZoom() {
   modal.addEventListener("click", (event) => {
     if (event.target === modal) {
       modal.style.display = "none";
+    }
+  });
+}
+
+async function saveCard(card) {
+  const result = await chrome.storage.local.get("savedCards");
+  const cards = result.savedCards || [];
+
+  cards.push(card);
+
+  chrome.storage.local
+    .set({ savedCards: cards })
+    .then(() => console.log("Cards saved:", card))
+    .catch((err) => console.error("Failed to card:", err));
+}
+
+async function loadCards() {
+  const result = await chrome.storage.local.get("savedCards");
+  return result.savedCards || [];
+}
+
+async function populateSavedPage() {
+  const mainView = document.querySelector(".card-list");
+  const savedView = document.querySelector(".card-list-saved");
+  const savedPgBtn = document.getElementById("savedPgBtn");
+  const mainPgBtn = document.getElementById("mainPgBtn");
+  savedPgBtn.addEventListener("click", async () => {
+    if (savedView.classList.contains("hidden")) {
+      //retrieve from local storage
+
+      const cardsArray = await loadCards();
+      const container = document.querySelector(".card-list-saved");
+      container.innerHTML = "";
+
+      if (cardsArray.length === 0) {
+        container.innerHTML =
+          '<div class="empty-state">No saved summaries yet.</div>';
+        return;
+      }
+
+      for (const section of cardsArray) {
+        const card = document.createElement("div");
+        card.classList.add("card");
+
+        const heading = document.createElement("h2");
+        heading.textContent = section.heading;
+
+        const content = document.createElement("div");
+        content.textContent = section.content;
+
+        const img = document.createElement("img");
+        img.src = section.img;
+        //decode img to display
+
+        card.append(img, heading, content);
+        container.appendChild(card);
+      }
+      savedView.classList.remove("hidden");
+      mainView.classList.add("hidden");
+    } else {
+      return;
+    }
+  });
+  mainPgBtn.addEventListener("click", () => {
+    if (mainView.classList.contains("hidden")) {
+      mainView.classList.remove("hidden");
+      savedView.classList.add("hidden");
+    } else {
+      return;
     }
   });
 }
