@@ -181,7 +181,7 @@ async function renderSummary(data) {
 
     const content = document.createElement("div");
     content.textContent = section.content;
-    const saveBtn = document.createElement("button");
+    const saveBtn = defineSaveIconSVG();
     const img = document.createElement("img");
     try {
       const apiKey = await getAPIKey();
@@ -200,13 +200,22 @@ async function renderSummary(data) {
         error
       );
     }
+    const id = crypto.randomUUID();
+    const cardObj = {
+      id: id,
+      heading: section.heading,
+      content: section.content,
+      img: img.src || null,
+    };
     saveBtn.addEventListener("click", async () => {
-      const savedCard = {
-        heading: section.heading,
-        content: section.content,
-        img: img.src || null,
-      };
-      await saveCard(savedCard);
+      if (saveBtn.classList.contains("savedState")) {
+        //remove from storage and list,
+        await deleteCard(cardObj.id);
+        saveBtn.classList.remove("savedState");
+      } else {
+        await saveCard(cardObj);
+        saveBtn.classList.add("savedState");
+      }
     });
     card.append(heading, content, saveBtn);
     container.appendChild(card);
@@ -287,7 +296,17 @@ async function loadCards() {
   const result = await chrome.storage.local.get("savedCards");
   return result.savedCards || [];
 }
+async function deleteCard(cardId) {
+  const result = await chrome.storage.local.get("savedCards");
+  const cards = result.savedCards || [];
+  const updatedCards = cards.filter((card) => card.id !== cardId);
+  chrome.storage.local
+    .set({ savedCards: updatedCards })
+    .then(() => console.log(`Card ${cardId} deleted`))
+    .catch((err) => console.error("Failed to delete card:", err));
+}
 
+//attach listeners to saved pg nav button and home page nav button and populate saved pg when clicked
 async function switchViews() {
   const mainView = document.querySelector(".card-list");
   const savedView = document.querySelector(".card-list-saved");
@@ -310,6 +329,7 @@ async function switchViews() {
       for (const section of cardsArray) {
         const card = document.createElement("div");
         card.classList.add("card");
+        card.dataset.id = section.id;
 
         const heading = document.createElement("h2");
         heading.textContent = section.heading;
@@ -342,4 +362,22 @@ async function switchViews() {
       return;
     }
   });
+}
+
+function defineSaveIconSVG() {
+  const svgNS = "http://www.w3.org/2000/svg";
+  const svg = document.createElementNS(svgNS, "svg");
+  svg.setAttribute("class", "savePgBtnCard");
+  svg.setAttribute("width", 200);
+  svg.setAttribute("height", 200);
+  svg.setAttribute("viewBox", "0 0 16 16");
+
+  const path = document.createElementNS(svgNS, "path");
+  path.setAttribute(
+    "d",
+    "M3.75 2a.75.75 0 0 0-.75.75v10.5a.75.75 0 0 0 1.28.53L8 10.06l3.72 3.72a.75.75 0 0 0 1.28-.53V2.75a.75.75 0 0 0-.75-.75z"
+  );
+  svg.appendChild(path);
+
+  return svg;
 }

@@ -56,6 +56,14 @@ body {
   fill: var(--button);
 }
 
+.savePgBtnCard {
+  fill: var(--text-secondary);
+  width: 24px;
+  height: 24px;
+}
+.savePgBtnCard.savedState {
+  fill: var(--button);
+}
 #settings-overlay {
   position: fixed;
   top: 40px;
