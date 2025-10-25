@@ -2,7 +2,7 @@ import { GoogleGenAI, Modality } from "@google/genai";
 
 /*OVERLAY*/
 const overlay = document.getElementById("settings-overlay");
-const settingsBtn = document.getElementById("settingsBtn");
+const settingsBtn = document.getElementById("settingsIcon");
 console.log(overlay.style.display);
 settingsBtn.addEventListener("click", (e) => {
   e.stopPropagation();
@@ -65,7 +65,7 @@ async function getAPIKey() {
 
 /* DOM CONTENT LOAD */
 document.addEventListener("DOMContentLoaded", () => {
-  populateSavedPage();
+  switchViews();
   openZoom();
   setAPIKey();
   getAPIKey();
@@ -288,7 +288,7 @@ async function loadCards() {
   return result.savedCards || [];
 }
 
-async function populateSavedPage() {
+async function switchViews() {
   const mainView = document.querySelector(".card-list");
   const savedView = document.querySelector(".card-list-saved");
   const savedPgBtn = document.getElementById("savedPgBtn");
@@ -325,6 +325,8 @@ async function populateSavedPage() {
         container.appendChild(card);
       }
       savedView.classList.remove("hidden");
+      savedPgBtn.style.fill = "#2563eb";
+      mainPgBtn.style.fill = "#4b5563";
       mainView.classList.add("hidden");
     } else {
       return;
@@ -334,6 +336,8 @@ async function populateSavedPage() {
     if (mainView.classList.contains("hidden")) {
       mainView.classList.remove("hidden");
       savedView.classList.add("hidden");
+      mainPgBtn.style.fill = "#2563eb";
+      savedPgBtn.style.fill = "#4b5563";
     } else {
       return;
     }

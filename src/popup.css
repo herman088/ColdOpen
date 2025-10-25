@@ -1,12 +1,15 @@
 :root {
-  --bg: #f5f7fa; /* Light grey-blue base */
-  --card-bg: #fcfdff; /* Almost white, but with cool grey undertone */
-  --text: #1a1f29;
-  --text-secondary: #5a6374;
-  --border: #dde3eb;
-  --button: #3b82f6;
-  --button-hover: #2563eb;
+  --bg: #f5f7fa; /* Very light gray background */
+  --card-bg: #ffffff; /* White cards */
+  --text: #1f2937; /* Dark gray text */
+  --text-secondary: #4b5563; /* Medium gray for subtitles */
+  --border: #e5e7eb; /* Soft dividers */
+  --button: #2563eb; /* Soft blue for interactive buttons */
+  --button-hover: #1d4ed8; /* Darker blue on hover */
+  --accent: #60a5fa; /* Light blue accent for icons or tags */
+  --save: #fbbf24; /* Golden yellow for saved items */
 }
+
 body {
   width: 360px;
   height: 580px;
@@ -19,26 +22,38 @@ body {
   display: flex;
   flex-direction: column;
   margin-top: 60px;
+  align-items: center;
 }
 .container {
   display: flex;
   flex-direction: column;
   height: 100%;
 }
-#settingsBtn {
-  background: var(--bg);
-  border: none;
-  border-radius: 100%;
-  width: 36px;
-  height: 36px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: fixed;
-  cursor: pointer;
+/* top nav */
+#settingsIcon {
+  width: 20px;
+  height: 20px;
   top: 15px;
   right: 15px;
-  z-index: 200;
+  position: fixed;
+  cursor: pointer;
+  fill: var(--text-secondary);
+}
+
+#savedPgBtn,
+#mainPgBtn {
+  position: fixed;
+  width: 20px;
+  height: 20px;
+  top: 15px;
+}
+#savedPgBtn {
+  right: 45px;
+  fill: var(--text-secondary);
+}
+#mainPgBtn {
+  right: 75px;
+  fill: var(--button);
 }
 
 #settings-overlay {
@@ -86,6 +101,10 @@ label {
   padding: 0.75rem 1rem;
   cursor: pointer;
 }
+#generateBtn {
+  width: 200px;
+  height: auto;
+}
 #apiKeyBtn {
   padding: 0.5rem;
 }
@@ -96,7 +115,7 @@ button.active {
   background-color: var(--button-hover);
 }
 
-#extractBtn:disabled {
+#generateBtn:disabled {
   background: #555;
   cursor: not-allowed;
 }
