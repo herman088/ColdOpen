@@ -330,7 +330,7 @@ async function switchViews() {
 
       for (const section of cardsArray) {
         const card = document.createElement("div");
-        card.classList.add("card");
+        card.classList.add("card-grid");
         card.dataset.id = section.id;
 
         const heading = document.createElement("h2");
@@ -338,6 +338,7 @@ async function switchViews() {
 
         const content = document.createElement("div");
         content.textContent = section.content;
+        content.style.display = "none";
 
         const img = document.createElement("img");
         img.src = section.img;
@@ -346,7 +347,7 @@ async function switchViews() {
         saveBtn.addEventListener("click", async () => {
           await deleteCard(section.id);
           const domCardDel = document.querySelectorAll(
-            `.card-list-saved .card[data-id="${section.id}"]`
+            `.card-list-saved .card-grid[data-id="${section.id}"]`
           );
           domCardDel.forEach((card) => card.remove());
           //change class to remove savedState from main page
