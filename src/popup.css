@@ -18,12 +18,20 @@ body {
   color: var(--text);
 }
 
-.cta {
-  display: flex;
-  flex-direction: column;
-  margin-top: 60px;
-  align-items: center;
+#status {
+  position: fixed;
+  top: 80px;
+  left: 20px;
 }
+#generateBtn {
+  position: fixed;
+  width: 180px;
+  height: auto;
+  top: 50px;
+  left: 15px;
+  padding: 0;
+}
+
 .container {
   display: flex;
   flex-direction: column;
@@ -109,10 +117,7 @@ label {
   padding: 0.75rem 1rem;
   cursor: pointer;
 }
-#generateBtn {
-  width: 200px;
-  height: auto;
-}
+
 #apiKeyBtn {
   padding: 0.5rem;
 }
@@ -128,27 +133,32 @@ button.active {
   cursor: not-allowed;
 }
 
+.card-list-saved,
 .card-list {
-  margin-top: 20px;
+  margin-top: 120px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  flex: 1;
+  /*key*/
   overflow-y: auto;
 }
+.card-list-saved::-webkit-scrollbar,
 .card-list::-webkit-scrollbar {
   width: 6px;
 }
 
+.card-list-saved::-webkit-scrollbar-track,
 .card-list::-webkit-scrollbar-track {
   background: transparent;
 }
 
+.card-list-saved::-webkit-scrollbar-thumb,
 .card-list::-webkit-scrollbar-thumb {
   background: rgba(0, 0, 0, 0.2);
   border-radius: 3px;
 }
 
+.card-list-saved::-webkit-scrollbar-button,
 .card-list::-webkit-scrollbar-button {
   display: none;
 }

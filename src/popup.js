@@ -173,15 +173,17 @@ async function renderSummary(data) {
   );
 
   for (const section of data.sections) {
+    const id = crypto.randomUUID();
     const card = document.createElement("div");
     card.classList.add("card");
+    card.dataset.id = id;
 
     const heading = document.createElement("h2");
     heading.textContent = section.heading;
 
     const content = document.createElement("div");
     content.textContent = section.content;
-    const saveBtn = defineSaveIconSVG();
+    const saveBtn = defineSaveIconSVG("savePgBtnCard");
     const img = document.createElement("img");
     try {
       const apiKey = await getAPIKey();
@@ -200,7 +202,7 @@ async function renderSummary(data) {
         error
       );
     }
-    const id = crypto.randomUUID();
+
     const cardObj = {
       id: id,
       heading: section.heading,
@@ -209,7 +211,7 @@ async function renderSummary(data) {
     };
     saveBtn.addEventListener("click", async () => {
       if (saveBtn.classList.contains("savedState")) {
-        //remove from storage and list,
+        //remove from storage and rmv class,
         await deleteCard(cardObj.id);
         saveBtn.classList.remove("savedState");
       } else {
@@ -339,9 +341,27 @@ async function switchViews() {
 
         const img = document.createElement("img");
         img.src = section.img;
-        //decode img to display
 
-        card.append(img, heading, content);
+        const saveBtn = defineSaveIconSVG("savePgBtnCard savedState");
+        saveBtn.addEventListener("click", async () => {
+          await deleteCard(section.id);
+          const domCardDel = document.querySelectorAll(
+            `.card-list-saved .card[data-id="${section.id}"]`
+          );
+          domCardDel.forEach((card) => card.remove());
+          //change class to remove savedState from main page
+          const cardClassMain = document.querySelectorAll(
+            `.card-list .card[data-id="${section.id}"]`
+          );
+          cardClassMain.forEach((card) => {
+            const svgChild = card.querySelector("svg");
+            if (svgChild) {
+              svgChild.classList.remove("savedState");
+            }
+          });
+        });
+
+        card.append(img, heading, content, saveBtn);
         container.appendChild(card);
       }
       savedView.classList.remove("hidden");
@@ -352,7 +372,7 @@ async function switchViews() {
       return;
     }
   });
-  mainPgBtn.addEventListener("click", () => {
+  mainPgBtn.addEventListener("click", async () => {
     if (mainView.classList.contains("hidden")) {
       mainView.classList.remove("hidden");
       savedView.classList.add("hidden");
@@ -364,10 +384,10 @@ async function switchViews() {
   });
 }
 
-function defineSaveIconSVG() {
+function defineSaveIconSVG(classNm) {
   const svgNS = "http://www.w3.org/2000/svg";
   const svg = document.createElementNS(svgNS, "svg");
-  svg.setAttribute("class", "savePgBtnCard");
+  svg.setAttribute("class", classNm);
   svg.setAttribute("width", 200);
   svg.setAttribute("height", 200);
   svg.setAttribute("viewBox", "0 0 16 16");
