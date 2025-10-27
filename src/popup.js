@@ -320,7 +320,6 @@ async function switchViews() {
 
       const cardsArray = await loadCards();
       const container = document.querySelector(".card-list-saved");
-      container.innerHTML = "";
 
       if (cardsArray.length === 0) {
         container.innerHTML =

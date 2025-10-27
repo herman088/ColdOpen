@@ -71,12 +71,19 @@
         </div>
       </div>
     </div>
-    <button id="generateBtn">Generate Insight cards</button>
-    <div id="status"><h3>Click button to analyze this page</h3></div>
+
     <div class="container">
       <!-- Card List -->
-      <div class="card-list"></div>
-      <div class="card-list-saved hidden"></div>
+      <div class="card-list">
+        <button id="generateBtn">Generate Insight cards</button>
+        <div id="status"><h3>Click button to analyze this page</h3></div>
+      </div>
+
+      <div class="card-list-saved hidden">
+        <div class="savedHeader">
+          <h2 class="savedHeaderTxt">Saved Ideas</h2>
+        </div>
+      </div>
     </div>
 
     <script src="../dist/popup.bundle.js"></script>
