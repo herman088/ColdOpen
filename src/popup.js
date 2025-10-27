@@ -161,7 +161,6 @@ async function renderSummary(data) {
     return;
   }
   const container = document.querySelector(".card-list");
-  container.innerHTML = "";
 
   const observer = new IntersectionObserver(
     (entries) => {
@@ -308,26 +307,52 @@ async function deleteCard(cardId) {
     .catch((err) => console.error("Failed to delete card:", err));
 }
 
-//attach listeners to saved pg nav button and home page nav button and populate saved pg when clicked
+//attach listeners to saved pg nav button and home page nav button and populate saved pg when clicked, saved pg logic
 async function switchViews() {
   const mainView = document.querySelector(".card-list");
   const savedView = document.querySelector(".card-list-saved");
   const savedPgBtn = document.getElementById("savedPgBtn");
   const mainPgBtn = document.getElementById("mainPgBtn");
+
   savedPgBtn.addEventListener("click", async () => {
     if (savedView.classList.contains("hidden")) {
-      //retrieve from local storage
-
+      savedView.classList.remove("hidden");
+      savedPgBtn.style.fill = "#2563eb";
+      mainPgBtn.style.fill = "#4b5563";
+      mainView.classList.add("hidden");
+      switchCardView();
       const cardsArray = await loadCards();
+
       const container = document.querySelector(".card-list-saved");
+      //if if any new items added to storage, if storage and saved-card-list dom has changes, re-render,
+      const domCardIds = Array.from(
+        container.querySelectorAll(".card-grid")
+      ).map((card) => card.dataset.id);
+      const storageCardIds = cardsArray.map((card) => card.id);
+
+      const isSameLength = domCardIds.length === storageCardIds.length;
+      const isSameContent =
+        isSameLength &&
+        storageCardIds.every((id, i) => id === storageCardIds[i]);
+
+      if (isSameContent) {
+        console.log("no content change, skip re render");
+        return;
+      }
 
       if (cardsArray.length === 0) {
         container.innerHTML =
           '<div class="empty-state">No saved summaries yet.</div>';
         return;
       }
-
+      Array.from(container.children).forEach((child) => {
+        if (!child.classList.contains("savedHeader")) {
+          child.remove();
+        }
+      });
       for (const section of cardsArray) {
+        //const emptyState = document.querySelector(".empty-state");
+        //emptyState.style.display = "none";
         const card = document.createElement("div");
         card.classList.add("card-grid");
         card.dataset.id = section.id;
@@ -336,6 +361,7 @@ async function switchViews() {
         heading.textContent = section.heading;
 
         const content = document.createElement("div");
+        content.classList.add("contentText");
         content.textContent = section.content;
         content.style.display = "none";
 
@@ -343,7 +369,8 @@ async function switchViews() {
         img.src = section.img;
 
         const saveBtn = defineSaveIconSVG("savePgBtnCard savedState");
-        saveBtn.addEventListener("click", async () => {
+        saveBtn.addEventListener("click", async (e) => {
+          e.stopPropagation();
           await deleteCard(section.id);
           const domCardDel = document.querySelectorAll(
             `.card-list-saved .card-grid[data-id="${section.id}"]`
@@ -364,16 +391,13 @@ async function switchViews() {
         card.append(img, heading, content, saveBtn);
         container.appendChild(card);
       }
-      savedView.classList.remove("hidden");
-      savedPgBtn.style.fill = "#2563eb";
-      mainPgBtn.style.fill = "#4b5563";
-      mainView.classList.add("hidden");
     } else {
       return;
     }
   });
   mainPgBtn.addEventListener("click", async () => {
     if (mainView.classList.contains("hidden")) {
+      revertCardView();
       mainView.classList.remove("hidden");
       savedView.classList.add("hidden");
       mainPgBtn.style.fill = "#2563eb";
@@ -400,4 +424,68 @@ function defineSaveIconSVG(classNm) {
   svg.appendChild(path);
 
   return svg;
+}
+
+function switchCardView() {
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        entry.target.classList.toggle("active", entry.isIntersecting);
+      });
+    },
+    { threshold: 0.6 }
+  );
+
+  const cardContainer = document.querySelector(".card-list-saved");
+  cardContainer.addEventListener("click", (e) => {
+    e.stopPropagation();
+    if (e.target.closest(".savePgBtnCard")) return;
+    const clickedCard = e.target.closest(".card-grid");
+    // card container style
+    cardContainer.classList.remove("card-list-saved");
+    cardContainer.classList.add("card-list-saved-expanded");
+
+    //card style
+    cardContainer.querySelectorAll(".card-grid").forEach((card) => {
+      const text = card.querySelector(".contentText");
+      text.style.display = "inline-block";
+      card.classList.remove("card-grid");
+      card.classList.add("card");
+      observer.observe(card);
+
+      const svgSaveBtn = card.querySelector("svg");
+
+      svgSaveBtn.addEventListener("click", () => {
+        const domCardDel = document.querySelectorAll(
+          `.card-list-saved-expanded .card[data-id="${card.dataset.id}"]`
+        );
+        domCardDel.forEach((card) => card.remove());
+      });
+    });
+    if (clickedCard) {
+      clickedCard.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+    }
+  });
+}
+
+//add func when user clicks main page and when user clicks "back" in expandedSaved view
+function revertCardView() {
+  const cardContainer = document.querySelector(".card-list-saved-expanded");
+  if (cardContainer) {
+    cardContainer.classList.remove("card-list-saved-expanded");
+    cardContainer.classList.add("card-list-saved");
+
+    cardContainer.querySelectorAll(".card").forEach((card) => {
+      const text = card.querySelector(".contentText");
+      text.style.display = "none";
+      card.classList.remove("card");
+      card.classList.add("card-grid");
+    });
+  } else {
+    // could be in not expanded , grid mode
+    return;
+  }
 }

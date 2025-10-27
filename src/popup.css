@@ -138,8 +138,8 @@ button.active {
   cursor: not-allowed;
 }
 
-.card-list-saved,
-.card-list {
+.card-list,
+.card-list-saved-expanded {
   margin-top: 120px;
   display: flex;
   flex-direction: column;
@@ -148,23 +148,27 @@ button.active {
   overflow-y: auto;
 }
 .card-list-saved::-webkit-scrollbar,
-.card-list::-webkit-scrollbar {
+.card-list::-webkit-scrollbar,
+.card-list-saved-expanded::-webkit-scrollbar {
   width: 6px;
 }
 
 .card-list-saved::-webkit-scrollbar-track,
-.card-list::-webkit-scrollbar-track {
+.card-list::-webkit-scrollbar-track,
+.card-list-saved-expanded::-webkit-scrollbar-track {
   background: transparent;
 }
 
 .card-list-saved::-webkit-scrollbar-thumb,
-.card-list::-webkit-scrollbar-thumb {
+.card-list::-webkit-scrollbar-thumb,
+.card-list-saved-expanded::-webkit-scrollbar-thumb {
   background: rgba(0, 0, 0, 0.2);
   border-radius: 3px;
 }
 
 .card-list-saved::-webkit-scrollbar-button,
-.card-list::-webkit-scrollbar-button {
+.card-list::-webkit-scrollbar-button,
+.card-list-saved-expanded::-webkit-scrollbar-button {
   display: none;
 }
 
@@ -173,6 +177,9 @@ button.active {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 8px;
+  overflow-y: auto;
+  margin-top: 120px;
+  align-items: center;
 }
 .card-grid {
   width: 100%;
@@ -232,10 +239,9 @@ button.active {
   font-size: 16px;
   margin: 10px;
   word-break: break-word;
-
   font-weight: 600;
 }
-.card p {
+.card .textContent {
   font-size: 14px;
   margin: 10px;
   overflow: hidden;
