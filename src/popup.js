@@ -441,6 +441,14 @@ function switchCardView() {
     e.stopPropagation();
     if (e.target.closest(".savePgBtnCard")) return;
     const clickedCard = e.target.closest(".card-grid");
+    //if target not card or text or img
+    if (
+      e.target !== clickedCard &&
+      !e.target.closest("img") &&
+      !e.target.closest("h2")
+    )
+      return;
+
     // card container style
     cardContainer.classList.remove("card-list-saved");
     cardContainer.classList.add("card-list-saved-expanded");
