@@ -181,6 +181,7 @@ async function renderSummary(data) {
     heading.textContent = section.heading;
 
     const content = document.createElement("div");
+    content.classList.add("contentText");
     content.textContent = section.content;
     const saveBtn = defineSaveIconSVG("savePgBtnCard");
     const img = document.createElement("img");
