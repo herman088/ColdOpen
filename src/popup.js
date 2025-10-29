@@ -76,7 +76,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   btn.addEventListener("click", async () => {
     btn.disabled = true;
-    status.textContent = "Reading page...";
+    setState("Reading Page....", true);
     const readerLevel = await getUserLevel();
 
     try {
@@ -87,9 +87,8 @@ document.addEventListener("DOMContentLoaded", () => {
       });
 
       if (!tab.url.startsWith("http")) {
-        status.textContent =
-          " Can't analyze this page (file://, chrome://, etc.)";
-        btn.disabled = false;
+        btn.disabled = false; //reset btn
+        setState("Can't analyze this page (file://, chrome://, etc.)", false); //hide loader
         return;
       }
       //promise fulfilled with response object reply by content.js
@@ -99,15 +98,20 @@ document.addEventListener("DOMContentLoaded", () => {
       });
 
       if (response.success) {
-        status.textContent = "Parsing article with Summarizer";
+        setState("Parsing article with summarizer", true);
         console.log("Article title:", response.title);
         console.log("Text:", response.text);
         renderSummary(response.text);
       } else {
-        status.textContent = " Couldn't extract clean text. Try another page.";
-        btn.disabled = false;
+        btn.disabled = false; //reset btn
+        setState(
+          "Couldn't extract clean text. Try again or try another another page.",
+          false
+        ); //hide loader
       }
     } catch (error) {
+      btn.disabled = false; //reset btn
+      setState("Extraction faced an error.", false); //hide loader
       console.log("Extraction error", error);
     }
   });
@@ -138,7 +142,6 @@ function setUserLevel() {
 async function getUserLevel() {
   try {
     const buttons = document.querySelectorAll(".level-buttons button");
-
     // await the promise and get the data
     const data = await chrome.storage.local.get("readerLevel");
     const savedLevel = data.readerLevel || "medium"; // default
@@ -160,8 +163,13 @@ async function renderSummary(data) {
     console.log("No data to render");
     return;
   }
+
+  const emptyState = document.querySelector(".empty-state");
   const container = document.querySelector(".card-list");
 
+  //if (data.sections.length > 0) {
+  //emptyState.classList.add("hidden"); // hide immediately
+  //}
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
@@ -222,9 +230,16 @@ async function renderSummary(data) {
     card.append(heading, content, saveBtn);
     container.appendChild(card);
     if (container.children.length === 1) {
+      emptyState.classList.add("hidden");
       card.classList.add("active");
     }
     observer.observe(card);
+    console.log(
+      "empty state",
+      emptyState,
+      emptyState.classList,
+      container.children.length
+    );
   }
 }
 
@@ -314,6 +329,8 @@ async function switchViews() {
   const savedView = document.querySelector(".card-list-saved");
   const savedPgBtn = document.getElementById("savedPgBtn");
   const mainPgBtn = document.getElementById("mainPgBtn");
+  const emptyStateView = document.querySelector(".empty-state");
+  const generateBtn = document.querySelector("#generateBtn");
 
   savedPgBtn.addEventListener("click", async () => {
     if (savedView.classList.contains("hidden")) {
@@ -321,6 +338,9 @@ async function switchViews() {
       savedPgBtn.style.fill = "#2563eb";
       mainPgBtn.style.fill = "#4b5563";
       mainView.classList.add("hidden");
+      emptyStateView.classList.add("hidden");
+      generateBtn.classList.add("hidden");
+
       switchCardView();
       const cardsArray = await loadCards();
 
@@ -343,7 +363,7 @@ async function switchViews() {
 
       if (cardsArray.length === 0) {
         container.innerHTML =
-          '<div class="empty-state">No saved summaries yet.</div>';
+          '<div class="empty-state-saved">No saved summaries yet.</div>';
         return;
       }
       Array.from(container.children).forEach((child) => {
@@ -398,6 +418,11 @@ async function switchViews() {
   });
   mainPgBtn.addEventListener("click", async () => {
     if (mainView.classList.contains("hidden")) {
+      generateBtn.classList.remove("hidden");
+      const mainViewCards = mainView.querySelectorAll(".card");
+      if (mainViewCards.length === 0) {
+        emptyStateView.classList.remove("hidden");
+      }
       revertCardView();
       mainView.classList.remove("hidden");
       savedView.classList.add("hidden");
@@ -496,5 +521,17 @@ function revertCardView() {
   } else {
     // could be in not expanded , grid mode
     return;
+  }
+}
+
+function setState(statusMsg, showLoader) {
+  const status = document.querySelector("#status");
+  const statusTxt = status.querySelector("h3");
+  const loader = document.querySelector(".loader");
+  statusTxt.textContent = statusMsg;
+  if (showLoader) {
+    loader.classList.remove("hidden");
+  } else {
+    loader.classList.add("hidden");
   }
 }

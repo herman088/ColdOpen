@@ -75,18 +75,30 @@
         </div>
       </div>
     </div>
-
+    <button id="generateBtn">Generate</button>
     <div class="container">
-      <div class="emptyStateDiv"></div>
       <!-- Card List -->
-      <div class="card-list">
-        <button id="generateBtn">Generate Insight cards</button>
-        <div id="status"><h3>Click button to analyze this page</h3></div>
-      </div>
+      <div class="card-list"></div>
 
       <div class="card-list-saved hidden">
         <div class="savedHeader">
           <h2 class="savedHeaderTxt">Saved Ideas</h2>
+        </div>
+      </div>
+
+      <!-- Empty state placeholder -->
+      <div class="empty-state">
+        <div class="card-stack">
+          <!-- Back card (smallest) -->
+          <div class="ghost-card back-left"><img src="../main.PNG" /></div>
+          <!-- Middle card -->
+          <div class="ghost-card back-right"><img src="../main.PNG" /></div>
+          <!-- Front card (largest) -->
+          <div class="ghost-card front"><img src="../main.PNG" /></div>
+        </div>
+        <div id="status">
+          <h3>Click button to analyze this page</h3>
+          <div class="loader hidden"></div>
         </div>
       </div>
     </div>

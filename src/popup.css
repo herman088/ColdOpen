@@ -24,22 +24,34 @@ body {
   left: 8px;
 }
 #status {
-  position: fixed;
-  top: 80px;
-  left: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
+  top: 400px;
   font-family: var(--font-ui);
   font-weight: 600;
   color: var(--text);
   text-align: center;
 }
+
 #generateBtn {
   position: fixed;
-  width: 180px;
+  width: auto;
   height: auto;
-  top: 50px;
+  top: 15px;
   left: 15px;
-  padding: 0;
   font-family: var(--font-ui);
+  background-color: var(--button);
+  color: var(--text);
+  padding: 6px 12px;
+  cursor: pointer;
+  text-align: center;
+  border-radius: 6px;
+  font-size: 0.8rem;
+
+  background: transparent;
+  border: 1px solid var(--button);
 }
 
 .container {
@@ -118,14 +130,13 @@ label {
   justify-content: space-between;
 }
 .level-buttons button,
-#generateBtn,
 #apiKeyBtn {
   background-color: var(--button);
   border: 1px solid;
   border-radius: 0.5rem;
   font-size: 0.8rem;
   text-align: center;
-  color: white;
+  color: var(--text);
   padding: 0.75rem 1rem;
   cursor: pointer;
 }
@@ -307,9 +318,6 @@ button.active {
   }
 }
 
-.hidden {
-  display: none;
-}
 button {
   font-weight: 600;
 }
@@ -317,4 +325,162 @@ label,
 h2,
 span {
   color: var(--text);
+}
+/* ghost cards */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 24px;
+  text-align: center;
+  max-width: 300px;
+  margin-top: 100px;
+}
+
+.card-stack {
+  position: relative;
+  width: 200px;
+  height: 160px;
+  display: flex;
+  justify-content: center;
+}
+.ghost-card {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  width: 100px;
+  height: 130px;
+  border-radius: 16px;
+  background: var(--card-bg);
+  box-shadow: 0 0 16px var(--text-secondary);
+  pointer-events: none;
+  transform-origin: bottom center;
+  align-items: center;
+}
+
+.ghost-card.back-left {
+  transform: rotate(-35deg) scale(0.8);
+  opacity: 1;
+  z-index: 1;
+}
+
+/* Back-right card: shifted right, lower opacity */
+.ghost-card.back-right {
+  transform: rotate(35deg) scale(0.8);
+  opacity: 1;
+  z-index: 2;
+}
+
+/* Front card: centered, higher opacity, on top */
+.ghost-card.front {
+  top: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 1;
+  z-index: 3;
+}
+.ghost-card img {
+  opacity: inherit;
+  width: 100%;
+  object-fit: cover;
+  border-radius: 16px;
+}
+
+/* HTML: <div class="loader"></div> */
+.loader {
+  width: 10px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 5px solid var(--accent);
+  animation: l20-1 0.8s infinite linear alternate, l20-2 1.6s infinite linear;
+}
+@keyframes l20-1 {
+  0% {
+    clip-path: polygon(50% 50%, 0 0, 50% 0%, 50% 0%, 50% 0%, 50% 0%, 50% 0%);
+  }
+  12.5% {
+    clip-path: polygon(
+      50% 50%,
+      0 0,
+      50% 0%,
+      100% 0%,
+      100% 0%,
+      100% 0%,
+      100% 0%
+    );
+  }
+  25% {
+    clip-path: polygon(
+      50% 50%,
+      0 0,
+      50% 0%,
+      100% 0%,
+      100% 100%,
+      100% 100%,
+      100% 100%
+    );
+  }
+  50% {
+    clip-path: polygon(
+      50% 50%,
+      0 0,
+      50% 0%,
+      100% 0%,
+      100% 100%,
+      50% 100%,
+      0% 100%
+    );
+  }
+  62.5% {
+    clip-path: polygon(
+      50% 50%,
+      100% 0,
+      100% 0%,
+      100% 0%,
+      100% 100%,
+      50% 100%,
+      0% 100%
+    );
+  }
+  75% {
+    clip-path: polygon(
+      50% 50%,
+      100% 100%,
+      100% 100%,
+      100% 100%,
+      100% 100%,
+      50% 100%,
+      0% 100%
+    );
+  }
+  100% {
+    clip-path: polygon(
+      50% 50%,
+      50% 100%,
+      50% 100%,
+      50% 100%,
+      50% 100%,
+      50% 100%,
+      0% 100%
+    );
+  }
+}
+@keyframes l20-2 {
+  0% {
+    transform: scaleY(1) rotate(0deg);
+  }
+  49.99% {
+    transform: scaleY(1) rotate(135deg);
+  }
+  50% {
+    transform: scaleY(-1) rotate(0deg);
+  }
+  100% {
+    transform: scaleY(-1) rotate(-135deg);
+  }
+}
+/* must be at bottom or overriden*/
+.hidden {
+  display: none;
 }
