@@ -1,21 +1,25 @@
 import { GoogleGenAI, Modality } from "@google/genai";
 
 /*OVERLAY*/
-const overlay = document.getElementById("settings-overlay");
+const settingsModal = document.getElementById("settings-overlay");
 const settingsBtn = document.getElementById("settingsIcon");
-console.log(overlay.style.display);
+const screenOverlay = document.createElement("div");
 settingsBtn.addEventListener("click", (e) => {
   e.stopPropagation();
-  if (overlay.style.display === "block") {
-    overlay.style.display = "none";
+  if (settingsModal.style.display === "block") {
+    settingsModal.style.display = "none";
   } else {
-    overlay.style.display = "block";
+    screenOverlay.classList.add("screen-overlay");
+    document.body.appendChild(screenOverlay);
+    settingsModal.style.display = "block";
+    screenOverlay.style.display = "flex";
   }
 });
 
 document.addEventListener("click", (e) => {
-  if (!overlay.contains(e.target) && e.target !== settingsBtn) {
-    overlay.style.display = "none";
+  if (!settingsModal.contains(e.target) && e.target !== settingsBtn) {
+    settingsModal.style.display = "none";
+    screenOverlay.style.display = "none";
   }
 });
 
@@ -267,7 +271,6 @@ async function getImageData(apiKey, promptText) {
 }
 
 function openZoom() {
-  const zoomableImgs = document.querySelectorAll(".card img");
   const modal = document.createElement("div");
   modal.classList.add("image-modal");
   const modalImg = document.createElement("img");
@@ -452,6 +455,7 @@ function defineSaveIconSVG(classNm) {
   return svg;
 }
 
+//grid to scrollable
 function switchCardView() {
   const observer = new IntersectionObserver(
     (entries) => {
@@ -461,7 +465,6 @@ function switchCardView() {
     },
     { threshold: 0.6 }
   );
-
   const cardContainer = document.querySelector(".card-list-saved");
   cardContainer.addEventListener("click", (e) => {
     e.stopPropagation();
@@ -474,10 +477,11 @@ function switchCardView() {
       !e.target.closest("h2")
     )
       return;
-
     // card container style
     cardContainer.classList.remove("card-list-saved");
     cardContainer.classList.add("card-list-saved-expanded");
+
+    imageModalSaved(cardContainer);
 
     //card style
     cardContainer.querySelectorAll(".card-grid").forEach((card) => {
@@ -496,6 +500,7 @@ function switchCardView() {
         domCardDel.forEach((card) => card.remove());
       });
     });
+
     if (clickedCard) {
       clickedCard.scrollIntoView({
         behavior: "smooth",
@@ -504,7 +509,39 @@ function switchCardView() {
     }
   });
 }
+function imageModalSaved(container) {
+  if (container.dataset.imageModal) return;
+  container.dataset.imageModal = "true";
+  container.addEventListener("click", (e) => {
+    if (e.target.tagName === "IMG") {
+      const modal = document.createElement("div");
+      modal.classList.add("image-modal");
 
+      const modalImg = document.createElement("img");
+      modalImg.src = e.target.src;
+
+      const closeBtn = document.createElement("span");
+      closeBtn.classList.add("close");
+      closeBtn.innerHTML = "&times;";
+
+      modal.appendChild(closeBtn);
+      modal.appendChild(modalImg);
+      document.body.appendChild(modal);
+
+      modal.style.display = "flex";
+
+      closeBtn.addEventListener("click", () => {
+        modal.remove();
+      });
+
+      modal.addEventListener("click", (event) => {
+        if (event.target === modal) {
+          modal.remove();
+        }
+      });
+    }
+  });
+}
 //add func when user clicks main page and when user clicks "back" in expandedSaved view
 function revertCardView() {
   const cardContainer = document.querySelector(".card-list-saved-expanded");

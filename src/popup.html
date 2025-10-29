@@ -54,13 +54,38 @@
     <!-- Settings overlay -->
     <div id="settings-overlay">
       <h2>Settings</h2>
-      <label for="apiKey">Enter your API key:</label>
+      <label for="apiKey"
+        >Enter your API key
+        <svg
+          class="constSVG"
+          xmlns="http://www.w3.org/2000/svg"
+          width="200"
+          height="200"
+          viewBox="0 0 472 384"
+        >
+          <path
+            d="M249 149h220v86h-42v85h-86v-85h-92q-14 37-47 61t-74 24q-53 0-90.5-37.5T0 192t37.5-90.5T128 64q41 0 74 24t47 61zm-121 86q18 0 30.5-12.5T171 192t-12.5-30.5T128 149t-30.5 12.5T85 192t12.5 30.5T128 235z"
+          /></svg
+      ></label>
+
       <input type="password" id="apiKeyField" name="apiKey" />
       <button id="apiKeyBtn">Save</button>
       <span id="savedText">Saved</span>
 
       <div class="reading-levels">
-        <label>Reading levels</label>
+        <label
+          >Reading levels
+          <svg
+            class="constSVG"
+            xmlns="http://www.w3.org/2000/svg"
+            width="200"
+            height="200"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M6.012 18H21V4a2 2 0 0 0-2-2H6c-1.206 0-3 .799-3 3v14c0 2.201 1.794 3 3 3h15v-2H6.012C5.55 19.988 5 19.805 5 19s.55-.988 1.012-1zM8 6h9v2H8V6z"
+            /></svg
+        ></label>
 
         <div class="level-buttons">
           <button type="button" class="basic" data-level="basic">Basic</button>
@@ -82,7 +107,20 @@
 
       <div class="card-list-saved hidden">
         <div class="savedHeader">
-          <h2 class="savedHeaderTxt">Saved Ideas</h2>
+          <h2 class="savedHeaderTxt">
+            Saved Ideas<svg
+              class="bulbSVG"
+              xmlns="http://www.w3.org/2000/svg"
+              width="200"
+              height="200"
+              viewBox="0 0 24 24"
+            >
+              <path
+                fill="#facc15"
+                d="m15.538 18.999l-.29 1.259a2.25 2.25 0 0 1-2.02 1.735l-.173.007h-2.111a2.25 2.25 0 0 1-2.147-1.577l-.046-.167l-.29-1.257h7.077ZM12 2.001a7.25 7.25 0 0 1 7.25 7.25c0 2.136-.936 4.093-2.765 5.84a.25.25 0 0 0-.071.125l-.528 2.283H8.114l-.526-2.283a.25.25 0 0 0-.071-.124C5.687 13.344 4.75 11.387 4.75 9.25A7.25 7.25 0 0 1 12 2.001Z"
+              />
+            </svg>
+          </h2>
         </div>
       </div>
 
