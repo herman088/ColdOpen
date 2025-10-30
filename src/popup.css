@@ -35,32 +35,24 @@ body {
   color: var(--text);
   text-align: center;
 }
+#status h3 {
+  max-width: 50%;
+}
 
 #generateBtn {
   position: fixed;
-  width: auto;
-  height: auto;
+  width: 20px;
+  height: 20px;
   top: 15px;
   left: 15px;
-  font-family: var(--font-ui);
-  background-color: var(--button);
-  color: var(--text);
-  padding: 6px 12px;
+  fill: var(--button);
   cursor: pointer;
-  text-align: center;
-  border-radius: 6px;
-  font-size: 0.8rem;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-
   /*background: transparent;
   border: 1px solid var(--button); */
 }
 #generateBtn:hover {
   /*inner + outer shadow*/
   transform: translateY(-2px);
-
-  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.4), 0 10px 13px rgba(59, 130, 246, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 .container {
   display: flex;
