@@ -201,7 +201,7 @@ async function renderSummary(data) {
       const apiKey = await getAPIKey();
       const imageDataLoad = await getImageData(
         apiKey,
-        `Generate relevant interesting and engaging visuals that summarize and simplify below text:${section.heading},${section.content}.`
+        section.promptForImageGeneration
       );
       if (imageDataLoad) {
         img.src = `data:image/png;base64,${imageDataLoad}`;
