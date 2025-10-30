@@ -92,7 +92,7 @@ body {
 }
 #mainPgBtn {
   right: 75px;
-  fill: var(--button);
+  fill: var(--text);
 }
 
 .savePgBtnCard {
@@ -188,7 +188,7 @@ label {
 }
 
 #generateBtn:disabled {
-  background: #555;
+  background: var(--text-secondary);
   cursor: not-allowed;
 }
 
@@ -236,13 +236,18 @@ label {
   align-items: center;
 }
 .card-grid {
+  background: var(--card-elevated);
   width: 100%;
   aspect-ratio: 1/1;
   display: flex;
   flex-direction: column;
   background: var(--card-bg);
+  border-top: 2px solid #3b82f6;
+  border-radius: 6px;
 }
-
+.card-grid:hover {
+  transform: translateY(-2px);
+}
 .card-grid img {
   width: 100%;
   flex-shrink: 0;
@@ -522,9 +527,7 @@ span {
 .hidden {
   display: none;
 }
-.card-list-saved card {
-  background: var(--card-elevated);
-}
+
 button.active {
   background: linear-gradient(
     135deg,
@@ -539,7 +542,7 @@ button.active {
 }
 .constSVG,
 .bulbSVG {
-  fill: var(--accent);
+  fill: var(--text-secondary);
   width: 20px;
   height: 20px;
   flex-shrink: 0;

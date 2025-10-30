@@ -173,7 +173,7 @@ async function renderSummary(data) {
   container.innerHTML = "";
 
   //if (data.sections.length > 0) {
-  //emptyState.classList.add("hidden"); // hide immediately
+  //emptyState.classList.add("hidden");
   //}
   const observer = new IntersectionObserver(
     (entries) => {
@@ -337,8 +337,8 @@ async function switchViews() {
   savedPgBtn.addEventListener("click", async () => {
     if (savedView.classList.contains("hidden")) {
       savedView.classList.remove("hidden");
-      savedPgBtn.style.fill = "#2563eb";
-      mainPgBtn.style.fill = "#4b5563";
+      savedPgBtn.style.fill = "#f8fafc";
+      mainPgBtn.style.fill = "#94a3b8";
       mainView.classList.add("hidden");
       emptyStateView.classList.add("hidden");
       generateBtn.classList.add("hidden");
@@ -428,8 +428,8 @@ async function switchViews() {
       revertCardView();
       mainView.classList.remove("hidden");
       savedView.classList.add("hidden");
-      mainPgBtn.style.fill = "#2563eb";
-      savedPgBtn.style.fill = "#4b5563";
+      mainPgBtn.style.fill = "#f8fafc";
+      savedPgBtn.style.fill = "#9483b8";
     } else {
       return;
     }
