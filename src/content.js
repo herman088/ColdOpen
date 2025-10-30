@@ -149,7 +149,7 @@ const schema = {
 };
 
 async function initPromptAPI(parsedArticle, readingLevel) {
-  const prompt = `Summarize this article into 3 sections.Each section maximum 60words. Reading Level:${readingLevel}.
+  const prompt = `Summarize this article into  sections.Each section maximum 60words. Reading Level:${readingLevel}.
 Article:${parsedArticle}.
 
 Return data with title, summary and sections. In each section, include relevant heading , summarized content for that section.Determine primary Topic, content Type,visual Type and prompt For ImageGeneration.
@@ -179,39 +179,12 @@ EXAMPLES:
 }
 
 {
-  "heading": "How Photosynthesis Works",
-  "content": "Light reactions split water releasing oxygen. Calvin cycle converts CO2 into glucose using ATP and NADPH for energy.",
-  "primaryTopic": "biology",
-  "contentType": "step-by-step-process",
-  "visualType": "process-flowchart",
-  "promptForImageGeneration": "flowchart showing photosynthesis stages with arrows connecting light reactions to Calvin cycle, inputs and outputs labeled, chloroplast background, educational diagram"
-}
-
-{
-  "heading": "Why Enzymes Speed Reactions",
-  "content": "Enzymes lower activation energy needed for reactions. Active site binds substrate, straining bonds and making reaction easier to occur.",
-  "primaryTopic": "chemistry",
-  "contentType": "cause-and-effect",
-  "visualType": "conceptual-illustration",
-  "promptForImageGeneration": "simplified illustration showing enzyme-substrate interaction with before and after energy graphs, active site binding visualization, clear arrows showing energy reduction, chemistry education style"
-}
-  
-{
   "heading": "Force Problem",
   "content": "5kg box pushed with 20N force. Using F=ma, acceleration equals 4 m/s² in direction of applied force.",
   "primaryTopic": "physics",
   "contentType": "worked-example",
   "visualType": "technical-diagram",
   "promptForImageGeneration": "diagram showing 5kg box with 20N force arrow, acceleration vector labeled 4 m/s², F=ma equation displayed, clean physics problem illustration with grid background"
-}
-
-{
-  "heading": "Pythagorean Theorem",
-  "content": "In right triangles, hypotenuse squared equals sum of other sides squared. Formula: a² + b² = c².",
-  "primaryTopic": "mathematics",
-  "contentType": "parts-and-structure",
-  "visualType": "mathematical-diagram",
-  "promptForImageGeneration": "right triangle with sides a, b, c clearly labeled, right angle marked with square, equation a² + b² = c² shown, clean geometric diagram with measurements"
 }
 
 {
@@ -224,30 +197,12 @@ EXAMPLES:
 }
 
 {
-  "heading": "Binary Search",
-  "content": "Compare target with middle element. If less, search left half. If greater, search right half. Repeat until found.",
-  "primaryTopic": "computer-science",
-  "contentType": "step-by-step-process",
-  "visualType": "process-flowchart",
-  "promptForImageGeneration": "flowchart showing binary search algorithm with decision diamonds for comparisons, branching arrows for left/right, array visualization, technical CS diagram style"
-}
-
-{
   "heading": "World War II Events",
   "content": "1939: War begins. 1941: Pearl Harbor. 1944: D-Day invasion. 1945: Atomic bombs, Japan surrenders, war ends.",
   "primaryTopic": "history",
   "contentType": "chronological-sequence",
   "visualType": "timeline",
   "promptForImageGeneration": "horizontal timeline spanning 1939-1945 with major WWII events marked at key dates, small historical icons, clear year labels, educational history style"
-}
-
-{
-  "heading": "Roman Forum",
-  "content": "Roman Forum was political center with temples, government buildings, spaces for speeches and trials in ancient Rome.",
-  "primaryTopic": "history",
-  "contentType": "parts-and-structure",
-  "visualType": "realistic-illustration",
-  "promptForImageGeneration": "realistic illustration of ancient Roman Forum showing marble columns, temples, government buildings, people in togas, period-accurate architecture, detailed historical scene"
 }
 
 {
