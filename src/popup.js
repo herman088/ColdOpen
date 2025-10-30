@@ -170,6 +170,7 @@ async function renderSummary(data) {
 
   const emptyState = document.querySelector(".empty-state");
   const container = document.querySelector(".card-list");
+  container.innerHTML = "";
 
   //if (data.sections.length > 0) {
   //emptyState.classList.add("hidden"); // hide immediately
@@ -237,13 +238,11 @@ async function renderSummary(data) {
       emptyState.classList.add("hidden");
       card.classList.add("active");
     }
+    if (container.children.length === data.sections.length) {
+      const btn = document.getElementById("generateBtn");
+      btn.disabled = false;
+    }
     observer.observe(card);
-    console.log(
-      "empty state",
-      emptyState,
-      emptyState.classList,
-      container.children.length
-    );
   }
 }
 

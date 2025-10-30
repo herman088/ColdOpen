@@ -154,16 +154,28 @@ Article:${parsedArticle}.
 
 Return data with title, summary and sections. In each section, include relevant heading , summarized content for that section.Determine primary Topic, content Type,visual Type and prompt For ImageGeneration.
 
+Here are some guides for each visual types to use with respect to its use case
+- scientific-diagram: Molecular structures, anatomical diagrams, chemical reactions with detailed labels
+- process-flowchart: Sequential workflows, decision trees, algorithms with directional flow
+- technical-diagram:  Engineering schematics, system architectures, circuit designs, network topologies
+- mathematical-diagram:  Geometric proofs, theorems, equation visualizations, set diagrams
+- data-chart: Statistical visualizations (bar, pie, line charts) for comparing quantities
+- coordinate-graph: Plotted functions, physics motion graphs, data points on axes
+- timeline:  Chronological events, project milestones, historical progressions
+- realistic-illustration: Lifelike scenes, historical events, detailed representational art
+- conceptual-illustration: Abstract ideas, metaphors, simplified explanations of concepts
+- comparison-table: Feature matrices, pros/cons lists, side-by-side specifications
+- map:  Geographic locations, territorial boundaries, spatial layouts, regional data
+- infographic: Visual summaries combining text, data, and graphics for storytelling
      
 EXAMPLES:
-
 {
   "heading": "Cell Membrane Structure",
   "content": "Cell membrane consists of phospholipid bilayer with embedded proteins and cholesterol controlling selective permeability.",
   "primaryTopic": "biology",
   "contentType": "parts-and-structure",
   "visualType": "scientific-diagram",
-  "promptForImageGeneration": "labeled cross-section of cell membrane showing phospholipid bilayer, proteins, cholesterol, color-coded, educational biology illustration"
+  "promptForImageGeneration": "labeled cross-section of cell membrane showing phospholipid bilayer, embedded proteins, cholesterol molecules, color-coded layers, educational biology illustration style"
 }
 
 {
@@ -172,7 +184,7 @@ EXAMPLES:
   "primaryTopic": "biology",
   "contentType": "step-by-step-process",
   "visualType": "process-flowchart",
-  "promptForImageGeneration": "flowchart showing photosynthesis stages with arrows connecting light reactions and Calvin cycle, labeled educational diagram"
+  "promptForImageGeneration": "flowchart showing photosynthesis stages with arrows connecting light reactions to Calvin cycle, inputs and outputs labeled, chloroplast background, educational diagram"
 }
 
 {
@@ -180,17 +192,17 @@ EXAMPLES:
   "content": "Enzymes lower activation energy needed for reactions. Active site binds substrate, straining bonds and making reaction easier to occur.",
   "primaryTopic": "chemistry",
   "contentType": "cause-and-effect",
-  "visualType": "process-flowchart",
-  "promptForImageGeneration": "diagram showing enzyme lowering activation energy with before and after energy graphs, substrate binding illustrated, chemistry education style"
+  "visualType": "conceptual-illustration",
+  "promptForImageGeneration": "simplified illustration showing enzyme-substrate interaction with before and after energy graphs, active site binding visualization, clear arrows showing energy reduction, chemistry education style"
 }
-
+  
 {
   "heading": "Force Problem",
   "content": "5kg box pushed with 20N force. Using F=ma, acceleration equals 4 m/s² in direction of applied force.",
   "primaryTopic": "physics",
   "contentType": "worked-example",
   "visualType": "technical-diagram",
-  "promptForImageGeneration": "diagram showing 5kg box with 20N force arrow, acceleration vector, F=ma equation, physics problem illustration"
+  "promptForImageGeneration": "diagram showing 5kg box with 20N force arrow, acceleration vector labeled 4 m/s², F=ma equation displayed, clean physics problem illustration with grid background"
 }
 
 {
@@ -199,16 +211,16 @@ EXAMPLES:
   "primaryTopic": "mathematics",
   "contentType": "parts-and-structure",
   "visualType": "mathematical-diagram",
-  "promptForImageGeneration": "right triangle with sides a, b, c labeled, right angle marked, equation shown, clean geometric diagram"
+  "promptForImageGeneration": "right triangle with sides a, b, c clearly labeled, right angle marked with square, equation a² + b² = c² shown, clean geometric diagram with measurements"
 }
 
 {
   "heading": "Function Graph",
   "content": "Function y = x² creates U-shaped parabola with vertex at origin, symmetric about y-axis, opening upward.",
   "primaryTopic": "mathematics",
-  "contentType": "statistics-and-numbers",
+  "contentType": "parts-and-structure",
   "visualType": "coordinate-graph",
-  "promptForImageGeneration": "parabola graphed on coordinate plane with vertex labeled, axis shown, key points marked, clean math graph"
+  "promptForImageGeneration": "parabola y=x² graphed on coordinate plane with vertex at origin labeled, axis of symmetry shown, key points marked, clean math graph with grid"
 }
 
 {
@@ -217,7 +229,7 @@ EXAMPLES:
   "primaryTopic": "computer-science",
   "contentType": "step-by-step-process",
   "visualType": "process-flowchart",
-  "promptForImageGeneration": "flowchart showing binary search with decision diamonds, compare middle, branch arrows, technical CS diagram"
+  "promptForImageGeneration": "flowchart showing binary search algorithm with decision diamonds for comparisons, branching arrows for left/right, array visualization, technical CS diagram style"
 }
 
 {
@@ -226,7 +238,7 @@ EXAMPLES:
   "primaryTopic": "history",
   "contentType": "chronological-sequence",
   "visualType": "timeline",
-  "promptForImageGeneration": "timeline 1939-1945 showing major WWII events with dates marked, historical imagery, educational style"
+  "promptForImageGeneration": "horizontal timeline spanning 1939-1945 with major WWII events marked at key dates, small historical icons, clear year labels, educational history style"
 }
 
 {
@@ -235,7 +247,7 @@ EXAMPLES:
   "primaryTopic": "history",
   "contentType": "parts-and-structure",
   "visualType": "realistic-illustration",
-  "promptForImageGeneration": "realistic illustration of ancient Roman Forum with columns, temples, people in togas, period-accurate architecture"
+  "promptForImageGeneration": "realistic illustration of ancient Roman Forum showing marble columns, temples, government buildings, people in togas, period-accurate architecture, detailed historical scene"
 }
 
 {
@@ -244,8 +256,11 @@ EXAMPLES:
   "primaryTopic": "business-finance",
   "contentType": "statistics-and-numbers",
   "visualType": "data-chart",
-  "promptForImageGeneration": "pie chart showing market share percentages with company labels, clean modern business presentation style"
-}`;
+  "promptForImageGeneration": "pie chart showing market share percentages with company labels A, B, C, color-coded segments, clean modern business presentation style with legend"
+}
+
+
+`;
   try {
     const availability = await LanguageModel.availability();
 
@@ -259,6 +274,10 @@ EXAMPLES:
         responseConstraint: schema,
       });
       console.log(JSON.parse(result));
+      console.log(
+        `${session.inputUsage} tokens used, out of ${session.inputQuota} tokens available.`
+      );
+      session.destroy();
       return JSON.parse(result);
     } else {
       alert("PROMPT API NOT READY/AVAILABLE");
