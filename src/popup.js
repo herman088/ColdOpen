@@ -79,7 +79,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const status = document.getElementById("status");
 
   btn.addEventListener("click", async () => {
-    btn.disabled = true;
+    btn.classList.add("is-disabled");
     setState("Reading Page....", true);
     const readerLevel = await getUserLevel();
 
@@ -91,7 +91,7 @@ document.addEventListener("DOMContentLoaded", () => {
       });
 
       if (!tab.url.startsWith("http")) {
-        btn.disabled = false; //reset btn
+        btn.classList.remove("is-disabled");
         setState("Can't analyze this page (file://, chrome://, etc.)", false); //hide loader
         return;
       }
@@ -107,14 +107,14 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log("Text:", response.text);
         renderSummary(response.text);
       } else {
-        btn.disabled = false; //reset btn
+        btn.classList.remove("is-disabled");
         setState(
           "Couldn't extract clean text. Try again or try another another page.",
           false
         ); //hide loader
       }
     } catch (error) {
-      btn.disabled = false; //reset btn
+      btn.classList.remove("is-disabled");
       setState("Extraction faced an error.", false); //hide loader
       console.log("Extraction error", error);
     }
@@ -240,7 +240,7 @@ async function renderSummary(data) {
     }
     if (container.children.length === data.sections.length) {
       const btn = document.getElementById("generateBtn");
-      btn.disabled = false;
+      btn.classList.remove("is-disabled");
     }
     observer.observe(card);
   }
@@ -336,9 +336,6 @@ async function switchViews() {
 
   savedPgBtn.addEventListener("click", async () => {
     if (savedView.classList.contains("hidden")) {
-      savedView.classList.remove("hidden");
-      savedPgBtn.style.fill = "#f8fafc";
-      mainPgBtn.style.fill = "#94a3b8";
       mainView.classList.add("hidden");
       emptyStateView.classList.add("hidden");
       generateBtn.classList.add("hidden");
@@ -347,21 +344,6 @@ async function switchViews() {
       const cardsArray = await loadCards();
 
       const container = document.querySelector(".card-list-saved");
-      //if if any new items added to storage, if storage and saved-card-list dom has changes, re-render,
-      const domCardIds = Array.from(
-        container.querySelectorAll(".card-grid")
-      ).map((card) => card.dataset.id);
-      const storageCardIds = cardsArray.map((card) => card.id);
-
-      const isSameLength = domCardIds.length === storageCardIds.length;
-      const isSameContent =
-        isSameLength &&
-        storageCardIds.every((id, i) => id === storageCardIds[i]);
-
-      if (isSameContent) {
-        console.log("no content change, skip re render");
-        return;
-      }
 
       if (cardsArray.length === 0) {
         container.innerHTML =
@@ -376,6 +358,8 @@ async function switchViews() {
       for (const section of cardsArray) {
         //const emptyState = document.querySelector(".empty-state");
         //emptyState.style.display = "none";
+        const saveBtn = defineSaveIconSVG("savePgBtnCard savedState");
+        saveBtn.style.display = "none";
         const card = document.createElement("div");
         card.classList.add("card-grid");
         card.dataset.id = section.id;
@@ -386,12 +370,11 @@ async function switchViews() {
         const content = document.createElement("div");
         content.classList.add("contentText");
         content.textContent = section.content;
-        content.style.display = "none";
+        content.style.display = "-webkit-box";
 
         const img = document.createElement("img");
         img.src = section.img;
 
-        const saveBtn = defineSaveIconSVG("savePgBtnCard savedState");
         saveBtn.addEventListener("click", async (e) => {
           e.stopPropagation();
           await deleteCard(section.id);
@@ -414,6 +397,9 @@ async function switchViews() {
         card.append(img, heading, content, saveBtn);
         container.appendChild(card);
       }
+      savedView.classList.remove("hidden");
+      savedPgBtn.style.fill = "#f8fafc";
+      mainPgBtn.style.fill = "#94a3b8";
     } else {
       return;
     }
@@ -430,6 +416,9 @@ async function switchViews() {
       savedView.classList.add("hidden");
       mainPgBtn.style.fill = "#f8fafc";
       savedPgBtn.style.fill = "#9483b8";
+
+      const backSvg = document.querySelector(".backSVG");
+      backSvg.style.display = "none";
     } else {
       return;
     }
@@ -454,8 +443,9 @@ function defineSaveIconSVG(classNm) {
   return svg;
 }
 
-//grid to scrollable
+//grid to scrollable, & back button behaviour revert to card-grid
 function switchCardView() {
+  const backSvg = document.querySelector(".backSVG");
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
@@ -467,7 +457,7 @@ function switchCardView() {
   const cardContainer = document.querySelector(".card-list-saved");
   cardContainer.addEventListener("click", (e) => {
     e.stopPropagation();
-    if (e.target.closest(".savePgBtnCard")) return;
+    if (e.target.closest(".backSVG")) return;
     const clickedCard = e.target.closest(".card-grid");
     //if target not card or text or img
     if (
@@ -479,7 +469,7 @@ function switchCardView() {
     // card container style
     cardContainer.classList.remove("card-list-saved");
     cardContainer.classList.add("card-list-saved-expanded");
-
+    backSvg.style.display = "inline-block";
     imageModalSaved(cardContainer);
 
     //card style
@@ -491,6 +481,7 @@ function switchCardView() {
       observer.observe(card);
 
       const svgSaveBtn = card.querySelector("svg");
+      svgSaveBtn.style.display = "inline-block";
 
       svgSaveBtn.addEventListener("click", () => {
         const domCardDel = document.querySelectorAll(
@@ -506,6 +497,19 @@ function switchCardView() {
         block: "center",
       });
     }
+  });
+  backSvg.addEventListener("click", () => {
+    cardContainer.classList.remove("card-list-saved-expanded");
+    cardContainer.classList.add("card-list-saved");
+    cardContainer.querySelectorAll(".card").forEach((card) => {
+      const text = card.querySelector(".contentText");
+      text.style.display = "-webkit-box";
+      card.classList.remove("card");
+      card.classList.add("card-grid");
+      const svgSaveBtn = card.querySelector("svg");
+      svgSaveBtn.style.display = "none";
+    });
+    backSvg.style.display = "none";
   });
 }
 function imageModalSaved(container) {

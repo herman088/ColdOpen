@@ -45,7 +45,7 @@ body {
   height: 20px;
   top: 15px;
   left: 15px;
-  fill: var(--button);
+  fill: var(--accent);
   cursor: pointer;
   /*background: transparent;
   border: 1px solid var(--button); */
@@ -179,9 +179,10 @@ label {
   outline: none; /* Remove default browser outline */
 }
 
-#generateBtn:disabled {
-  background: var(--text-secondary);
+#generateBtn.is-disabled {
+  fill: var(--text-secondary);
   cursor: not-allowed;
+  pointer-events: none;
 }
 
 .card-list,
@@ -256,6 +257,14 @@ label {
   overflow: hidden;
 }
 
+.card-grid .contentText {
+  font-family: var(--font-body);
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  color: var(--text);
+}
 /* card grid container */
 .card {
   display: flex;
@@ -266,10 +275,10 @@ label {
   padding: 1rem;
   border-radius: 16px;
   background: var(--card-bg);
-  margin: 1.5rem 0;
+  margin: 1rem 0;
   box-shadow: 0 0 25px var(--text-secondary);
   opacity: 0.4;
-  transform: translateY(30px) scale(0.95);
+  transform: translateY(30px) scale(0.85);
   transition: all 0.6s ease;
   align-items: flex-start;
 }
@@ -278,7 +287,7 @@ label {
   border-color: var(--text);
   box-shadow: 0 0 25px var(--accent);
   opacity: 1;
-  transform: translateY(0) scale(1);
+  transform: translateY(0) scale(0.9);
 }
 
 .card img {
@@ -533,7 +542,8 @@ button.active {
     /* Blue glow */ inset 0 1px 0 var(--button-hover); /* Top highlight */
 }
 .constSVG,
-.bulbSVG {
+.sparkleSVG,
+.backSVG {
   fill: var(--text-secondary);
   width: 20px;
   height: 20px;
@@ -548,7 +558,12 @@ label,
   font-weight: 500;
   margin-bottom: 8px;
 }
-.bulbSVG {
+.sparkleSVG {
   position: relative;
-  top: 2px;
+  left: 3px;
+}
+.backSVG {
+  position: relative;
+  top: 3px;
+  display: none;
 }
