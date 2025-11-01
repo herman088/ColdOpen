@@ -80,7 +80,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   btn.addEventListener("click", async () => {
     btn.classList.add("hidden");
-    setState("Reading Page....", true);
+    setState("Reading Page", true);
     const readerLevel = await getUserLevel();
 
     try {
