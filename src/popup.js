@@ -183,6 +183,21 @@ async function renderSummary(data) {
     },
     { threshold: 0.6 }
   );
+  const summaryCard = document.createElement("div");
+  summaryCard.classList.add("card");
+  const title = document.createElement("h2");
+  title.textContent = data.title;
+  const summary = document.createElement("div");
+  summary.classList.add("contentText");
+  summary.textContent = data.summary;
+  summaryCard.append(title, summary);
+  summaryCard.classList.add("active");
+
+  // remove empty state first and loader
+  const loader = document.querySelector(".loader");
+  loader.classList.add("hidden");
+  emptyState.classList.add("hidden");
+  container.appendChild(summaryCard);
 
   for (const section of data.sections) {
     const id = crypto.randomUUID();
@@ -234,12 +249,9 @@ async function renderSummary(data) {
     });
     card.append(heading, content, saveBtn);
     container.appendChild(card);
-    if (container.children.length === 1) {
-      //loader disappear
-      const loader = document.querySelector(".loader");
-      loader.classList.add("hidden");
-      emptyState.classList.add("hidden");
-      card.classList.add("active");
+
+    if (container.children.length === 2) {
+      //loader disappear      card.classList.add("active");
       const closeAIcards = document.querySelector(".closeAIcards");
       if (closeAIcards) closeAIcards.classList.remove("hidden");
     }
@@ -469,7 +481,7 @@ function switchCardView() {
   const cardContainer = document.querySelector(".card-list-saved");
   cardContainer.addEventListener("click", (e) => {
     e.stopPropagation();
-    //if (e.target.closest(".backSVG")) return;
+    if (e.target.closest(".backSVG")) return;
     const clickedCard = e.target.closest(".card-grid");
     //if target not card or text or img
     if (

@@ -22,7 +22,7 @@ body {
 .savedHeader {
   position: fixed;
   top: 50px;
-  left: 8px;
+  left: 15px;
 }
 #status {
   display: flex;
@@ -33,7 +33,7 @@ body {
   font-weight: 600;
   color: var(--text);
   text-align: center;
-  top: 68%;
+  top: 63%;
   left: 50%;
   transform: translateX(-50%);
 }
@@ -47,13 +47,13 @@ body {
   height: 20px;
   fill: var(--accent);
   cursor: pointer;
-  top: 67%;
+  top: 60%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
 .loader {
   position: absolute;
-  top: 67%;
+  top: 60%;
   left: 50%;
   background-color: red;
   transform: translate(-50%, -50%);
@@ -282,6 +282,13 @@ label {
   overflow: hidden;
   color: var(--text);
 }
+.placeHolderTxt {
+  font-family: var(var(--font-body));
+  color: var(--text);
+  font-size: 12px;
+  position: relative;
+  top: 15px;
+}
 /* card grid container */
 .card {
   display: flex;
@@ -403,7 +410,7 @@ span {
 
 .card-stack {
   position: absolute;
-  top: 50%;
+  top: 40%;
   left: 50%;
   transform: translate(-50%, -50%);
   width: 200px;
@@ -424,7 +431,9 @@ span {
   transform-origin: bottom center;
   align-items: center;
 }
-
+ghost-card.back-left:hover,.ghost-card.back-right:,.ghost-card.front:hover {
+  transform: translateY(-2px);
+}
 .ghost-card.back-left {
   transform: rotate(-35deg) scale(0.8);
   opacity: 1;
@@ -522,6 +531,7 @@ label,
   font-weight: 500;
   margin-bottom: 8px;
 }
+
 .backSVG {
   position: relative;
   top: 3px;
@@ -535,4 +545,11 @@ label,
   position: fixed;
   top: 0px;
   left: 0px;
+}
+.logoText {
+  position: fixed;
+  top: 15px;
+  left: 30x;
+  color: var(--text);
+  font-family: var(--font-heading);
 }
