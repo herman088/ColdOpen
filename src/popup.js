@@ -79,7 +79,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const status = document.getElementById("status");
 
   btn.addEventListener("click", async () => {
-    btn.classList.add("is-disabled");
+    btn.classList.add("hidden");
     setState("Reading Page....", true);
     const readerLevel = await getUserLevel();
 
@@ -91,8 +91,8 @@ document.addEventListener("DOMContentLoaded", () => {
       });
 
       if (!tab.url.startsWith("http")) {
-        btn.classList.remove("is-disabled");
         setState("Can't analyze this page (file://, chrome://, etc.)", false); //hide loader
+        btn.classList.remove("hidden");
         return;
       }
       //promise fulfilled with response object reply by content.js
@@ -107,15 +107,15 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log("Text:", response.text);
         renderSummary(response.text);
       } else {
-        btn.classList.remove("is-disabled");
+        btn.classList.remove("hidden");
         setState(
           "Couldn't extract clean text. Try again or try another another page.",
           false
         ); //hide loader
       }
     } catch (error) {
-      btn.classList.remove("is-disabled");
       setState("Extraction faced an error.", false); //hide loader
+      btn.classList.remove("hidden");
       console.log("Extraction error", error);
     }
   });
@@ -235,13 +235,15 @@ async function renderSummary(data) {
     card.append(heading, content, saveBtn);
     container.appendChild(card);
     if (container.children.length === 1) {
+      //loader disappear
+      const loader = document.querySelector(".loader");
+      loader.classList.add("hidden");
       emptyState.classList.add("hidden");
       card.classList.add("active");
+      const closeAIcards = document.querySelector(".closeAIcards");
+      if (closeAIcards) closeAIcards.classList.remove("hidden");
     }
-    if (container.children.length === data.sections.length) {
-      const btn = document.getElementById("generateBtn");
-      btn.classList.remove("is-disabled");
-    }
+
     observer.observe(card);
   }
 }
@@ -333,12 +335,14 @@ async function switchViews() {
   const mainPgBtn = document.getElementById("mainPgBtn");
   const emptyStateView = document.querySelector(".empty-state");
   const generateBtn = document.querySelector("#generateBtn");
+  const closeAIcards = document.querySelector(".closeAIcards");
 
   savedPgBtn.addEventListener("click", async () => {
     if (savedView.classList.contains("hidden")) {
       mainView.classList.add("hidden");
       emptyStateView.classList.add("hidden");
       generateBtn.classList.add("hidden");
+      closeAIcards.classList.add("hidden");
 
       switchCardView();
       const cardsArray = await loadCards();
@@ -346,8 +350,9 @@ async function switchViews() {
       const container = document.querySelector(".card-list-saved");
 
       if (cardsArray.length === 0) {
-        container.innerHTML =
-          '<div class="empty-state-saved">No saved summaries yet.</div>';
+        savedView.classList.remove("hidden");
+        savedPgBtn.style.fill = "#f8fafc";
+        mainPgBtn.style.fill = "#94a3b8";
         return;
       }
       Array.from(container.children).forEach((child) => {
@@ -410,7 +415,11 @@ async function switchViews() {
       const mainViewCards = mainView.querySelectorAll(".card");
       if (mainViewCards.length === 0) {
         emptyStateView.classList.remove("hidden");
+        closeAIcards.classList.add("hidden");
+      } else {
+        closeAIcards.classList.remove("hidden");
       }
+
       revertCardView();
       mainView.classList.remove("hidden");
       savedView.classList.add("hidden");
@@ -442,10 +451,13 @@ function defineSaveIconSVG(classNm) {
 
   return svg;
 }
-
+let cardViewInitialized = false;
 //grid to scrollable, & back button behaviour revert to card-grid
 function switchCardView() {
+  if (cardViewInitialized) return;
+  cardViewInitialized = true;
   const backSvg = document.querySelector(".backSVG");
+  const closeAIcards = document.querySelector(".closeAIcards");
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
@@ -457,7 +469,7 @@ function switchCardView() {
   const cardContainer = document.querySelector(".card-list-saved");
   cardContainer.addEventListener("click", (e) => {
     e.stopPropagation();
-    if (e.target.closest(".backSVG")) return;
+    //if (e.target.closest(".backSVG")) return;
     const clickedCard = e.target.closest(".card-grid");
     //if target not card or text or img
     if (
@@ -482,6 +494,7 @@ function switchCardView() {
 
       const svgSaveBtn = card.querySelector("svg");
       svgSaveBtn.style.display = "inline-block";
+      if (closeAIcards) closeAIcards.classList.add("hidden");
 
       svgSaveBtn.addEventListener("click", () => {
         const domCardDel = document.querySelectorAll(
@@ -574,4 +587,15 @@ function setState(statusMsg, showLoader) {
   } else {
     loader.classList.add("hidden");
   }
+}
+const closeAIcards = document.querySelector(".closeAIcards");
+if (closeAIcards) {
+  closeAIcards.addEventListener("click", () => {
+    const container = document.querySelector(".card-list");
+    const emptyState = document.querySelector(".empty-state");
+
+    container.innerHTML = "";
+    closeAIcards.classList.add("hidden");
+    emptyState.classList.remove("hidden");
+  });
 }
