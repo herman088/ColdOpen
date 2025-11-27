@@ -119,6 +119,58 @@ document.addEventListener("DOMContentLoaded", () => {
       console.log("Extraction error", error);
     }
   });
+
+  //Refactored savePgBtn Listener , for card-list(generate) and card-list-saved-expanded view
+  document.body.addEventListener("click", async (e) => {
+    const saveBtn = e.target.closest(".savePgBtnCard");
+    if (!saveBtn) return;
+
+    const card = saveBtn.closest(".card") || saveBtn.closest(".card-grid");
+    if (!card) return;
+    const cardId = card.dataset.id;
+
+    if (card.closest(".card-list")) {
+      const isSaved = saveBtn.classList.contains("savedState");
+
+      if (isSaved) {
+        // Unsave
+        await deleteCard(cardId);
+        saveBtn.classList.remove("savedState");
+      } else {
+        const cardObj = {
+          id: cardId,
+          heading: card.querySelector("h2").textContent,
+          content: card.querySelector(".contentText").textContent,
+          img: card.querySelector("img")?.src || null,
+        };
+        console.log(cardObj);
+        await saveCard(cardObj);
+        saveBtn.classList.add("savedState");
+        console.log("PLS", cardObj);
+      }
+    } else {
+      // SAVED VIEW (either grid or expanded): Delete
+      await deleteCard(cardId);
+
+      // Remove from ALL saved views (grid + expanded)
+      const domCardDel = document.querySelectorAll(`
+        .card-list-saved .card-grid[data-id="${cardId}"],
+        .card-list-saved-expanded .card[data-id="${cardId}"]
+      `);
+      domCardDel.forEach((card) => card.remove());
+
+      // Update main view
+      const cardClassMain = document.querySelectorAll(
+        `.card-list .card[data-id="${cardId}"]`
+      );
+      cardClassMain.forEach((card) => {
+        const svgChild = card.querySelector("svg");
+        if (svgChild) {
+          svgChild.classList.remove("savedState");
+        }
+      });
+    }
+  });
 });
 
 // Function to initialize click listeners and save reader level
@@ -237,16 +289,7 @@ async function renderSummary(data) {
       content: section.content,
       img: img.src || null,
     };
-    saveBtn.addEventListener("click", async () => {
-      if (saveBtn.classList.contains("savedState")) {
-        //remove from storage and rmv class,
-        await deleteCard(cardObj.id);
-        saveBtn.classList.remove("savedState");
-      } else {
-        await saveCard(cardObj);
-        saveBtn.classList.add("savedState");
-      }
-    });
+
     card.append(heading, content, saveBtn);
     container.appendChild(card);
 
@@ -392,25 +435,6 @@ async function switchViews() {
         const img = document.createElement("img");
         img.src = section.img;
 
-        saveBtn.addEventListener("click", async (e) => {
-          e.stopPropagation();
-          await deleteCard(section.id);
-          const domCardDel = document.querySelectorAll(
-            `.card-list-saved .card-grid[data-id="${section.id}"]`
-          );
-          domCardDel.forEach((card) => card.remove());
-          //change class to remove savedState from main page
-          const cardClassMain = document.querySelectorAll(
-            `.card-list .card[data-id="${section.id}"]`
-          );
-          cardClassMain.forEach((card) => {
-            const svgChild = card.querySelector("svg");
-            if (svgChild) {
-              svgChild.classList.remove("savedState");
-            }
-          });
-        });
-
         card.append(img, heading, content, saveBtn);
         container.appendChild(card);
       }
@@ -480,7 +504,6 @@ function switchCardView() {
   );
   const cardContainer = document.querySelector(".card-list-saved");
   cardContainer.addEventListener("click", (e) => {
-    e.stopPropagation();
     if (e.target.closest(".backSVG")) return;
     const clickedCard = e.target.closest(".card-grid");
     //if target not card or text or img
@@ -507,13 +530,6 @@ function switchCardView() {
       const svgSaveBtn = card.querySelector("svg");
       svgSaveBtn.style.display = "inline-block";
       if (closeAIcards) closeAIcards.classList.add("hidden");
-
-      svgSaveBtn.addEventListener("click", () => {
-        const domCardDel = document.querySelectorAll(
-          `.card-list-saved-expanded .card[data-id="${card.dataset.id}"]`
-        );
-        domCardDel.forEach((card) => card.remove());
-      });
     });
 
     if (clickedCard) {
