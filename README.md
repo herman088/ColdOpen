@@ -19,7 +19,7 @@ https://youtu.be/u-2h5hzK144
 
 # Implementation to improve image reliability 
 **Used JSON schema to ensure consistency in response object**
-<img width="283" height="815" alt="image" src="https://github.com/user-attachments/assets/2d0dbe46-5361-4f0f-9296-92063a932f81" />
+<img width="283" height="815" alt="image" src="https://github.com/user-attachments/assets/2d0dbe46-5361-4f0f-9296-92063a932f81" /> \
 
 
 **Provided examples for LLM prompt API **
@@ -30,4 +30,4 @@ https://youtu.be/u-2h5hzK144
 More multimodal capabilities , context aware narration etc \
 Engaging quizzes or dialogues to engage with users while waiting for response and image generation \
 Exporting of cards into own gallery \
-Feedback generation through app and more personalized \
+Feedback generation through app and more personalized 
