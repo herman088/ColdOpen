@@ -53,7 +53,7 @@ body {
 }
 .loader {
   position: absolute;
-  top: 60%;
+  top: 67%;
   left: 50%;
   background-color: red;
   transform: translate(-50%, -50%);
