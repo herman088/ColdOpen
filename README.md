@@ -1,5 +1,4 @@
-# ColdOpen 
-<img width="48" height="48" alt="image" src="https://github.com/user-attachments/assets/ae13ebda-ddcf-4fe9-97fd-4ec41aa9e923" />
+# ColdOpen <img width="48" height="48" alt="image" src="https://github.com/user-attachments/assets/ae13ebda-ddcf-4fe9-97fd-4ec41aa9e923" />
 
 # What it does
 ColdOpen turns long-form content, wordy text content into Insight/Idea cards, capturing the main gist, while keeping users engaged. Get an overview of the content, dive deeper once you're ready! Powered by Google Built in Prompt API, leverage LLMS to summarize long wordy web content . Create AI generated images from curated prompts & Google gemini flash image, find joy in reading and learning again!
