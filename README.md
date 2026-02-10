@@ -1,4 +1,4 @@
-# Chrome-challenge-2025
+# ColdOpen
 
 # What it does
 ColdOpen turns long-form content, wordy text content into Insight/Idea cards, capturing the main gist, while keeping users engaged. Get an overview of the content, dive deeper once you're ready! Powered by Google Built in Prompt API, leverage LLMS to summarize long wordy web content . Create AI generated images from curated prompts & Google gemini flash image, find joy in reading and learning again!
