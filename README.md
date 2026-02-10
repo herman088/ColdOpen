@@ -18,8 +18,8 @@ Content is first parsed with external library **"ReadabilityJS"** to extract rea
 https://youtu.be/u-2h5hzK144
 
 # Implementations to improve image reliability 
-**Used JSON schema to ensure consistency in response object**
-<img width="283" height="800" alt="image" src="https://github.com/user-attachments/assets/2d0dbe46-5361-4f0f-9296-92063a932f81" /> \
+**Used JSON schema to ensure consistency in response object** \
+<img width="283" height="800" alt="image" src="https://github.com/user-attachments/assets/2d0dbe46-5361-4f0f-9296-92063a932f81" /> 
 
 
 **Provided examples for LLM prompt API**
