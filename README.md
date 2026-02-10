@@ -1,4 +1,4 @@
-# ColdOpenn
+# ColdOpen
 <img width="48" height="48" alt="image" src="https://github.com/user-attachments/assets/ae13ebda-ddcf-4fe9-97fd-4ec41aa9e923" />
 
 # What it does
