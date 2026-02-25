@@ -16,7 +16,7 @@ Used external libraries such as ReadibilityJS to parse long articles
 Content is first parsed with external library **"ReadabilityJS"** to extract readable parts of the website. It is then parsed to **prompt API** for further processing. Utilizing multi-shot prompting and examples to guide prompt API to provide topic and disciplinary relevant images. JSON schema was also used to ensure that output image prompts and summary output by API are structured and predictable, ensuring consistent flow of content in a card, yet providing insightful and fun ideas. 
 
 # Demo Video 
-https://youtu.be/u-2h5hzK144
+[Watch here](https://youtu.be/u-2h5hzK144)
 
 # Implementations to improve image reliability 
 **Used JSON schema to ensure consistency in response object** \
