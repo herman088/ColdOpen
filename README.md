@@ -2,18 +2,18 @@
 <img width="48" height="48" alt="image" src="https://github.com/user-attachments/assets/ae13ebda-ddcf-4fe9-97fd-4ec41aa9e923" />
 
 # What it does
-ColdOpen turns long-form content, wordy text content into Insight/Idea cards, capturing the main gist, while keeping users engaged. Get an overview of the content, dive deeper once you're ready! Powered by Google Built in Prompt API, leverage LLMS to summarize long wordy web content . Create AI generated images from curated prompts & Google gemini flash image, find joy in reading and learning again!
+ColdOpen turns long-form content, wordy text content into Insight/Idea cards, capturing the main gist, while keeping users engaged. Get an overview of the content, dive deeper once you're ready! Powered by **Google Built in Prompt API**, leverage LLMS to summarize long wordy web content . Create AI generated images from curated prompts & **Google gemini flash image**, find joy in reading and learning again!
 
 # Technology used
-Built Front-end using vanilla javascript and basic HTML
+Built Front-end using vanilla **javascript** and basic **HTML**
 
-Used external libraries such as ReadibilityJS to parse long articles
+Used external libraries such as **ReadibilityJS** to parse long articles and retrieve content
 
 **Google's gemini-2.5-flash image** for image generation
 
 **Google's built in prompt API** for summaries as well as image prompts.
 
-Content is first parsed with external library **"ReadabilityJS"** to extract readable parts of the website. It is then parsed to **prompt API** for further processing. Utilizing multi-shot prompting and examples to guide prompt API to provide topic and disciplinary relevant images. JSON schema was also used to ensure that output image prompts and summary output by API are structured and predictable, ensuring consistent flow of content in a card, yet providing insightful and fun ideas. 
+Content is first parsed with external library **"ReadabilityJS"** to extract readable parts of the website. It is then parsed to **prompt API** for further processing. Utilizing examples to guide prompt API to provide topic and disciplinary relevant images. JSON schema was also used to ensure that output image prompts and summary output by API are structured and predictable, ensuring consistent flow of content in a card, yet providing insightful and fun ideas. 
 
 # Demo Video 
 [Watch here](https://youtu.be/u-2h5hzK144)
