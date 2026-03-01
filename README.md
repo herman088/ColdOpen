@@ -19,7 +19,7 @@ Content is first parsed with external library **"ReadabilityJS"** to extract rea
 [Watch here](https://youtu.be/u-2h5hzK144)
 
 # Implementations to improve image reliability 
-**Used JSON schema to ensure consistency in response object** \
+**Used JSON schema to ensure consistency in response object** 
 ```
 const schema = {
   type: "object",
