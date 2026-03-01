@@ -23,7 +23,7 @@ Content is first parsed with external library **"ReadabilityJS"** to extract rea
 <img width="283" height="800" alt="image" src="https://github.com/user-attachments/assets/2d0dbe46-5361-4f0f-9296-92063a932f81" /> 
 
 
-**Provided examples for LLM prompt API** (multi shot prompting)
+**Provided examples for LLM prompt API** 
 <img width="973" height="313" alt="image" src="https://github.com/user-attachments/assets/3d433ede-888a-4c2f-8dd4-bbc50d1314c5" />
 
 
